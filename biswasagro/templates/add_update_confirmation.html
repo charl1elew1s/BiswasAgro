@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Add/Update Confirmation
+{% endblock %}
+
+{% block main-content %}
+
+<div class="confirmation-table-wrapper">
+    <h2>{{heading}}</h2>
+    <div class="confirmation-table-container">
+                <table>
+                        <tr>
+                            <th>Column Name</th>
+                            {% if new_entry %}
+                                <th>Value</th>
+                            {% else %}
+                                <th>Original Value</th>
+                                <th>Changed Value</th>
+                            {% endif %}
+                        </tr>
+                    <tbody>
+                    {% for field_data_map in field_data %}
+                        <tr>
+                            <td>{{ field_data_map.col_name }}</td>
+                            {% if new_entry %}
+                                <td class="orig-value">{{ field_data_map.orig_value }}</td>
+                            {% else %}
+                                <td class="orig-value">{{ field_data_map.orig_value }}</td>
+                                <td class="new-value">{{ field_data_map.new_value }}</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+    </div>
+        <div class="pagination-container">
+        <div class="pagination-left">
+            <a href="{{ next_url }}" class="pagination-button">Return</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

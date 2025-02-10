@@ -1,0 +1,22 @@
+            <div class="pagination-container">
+                <div class="pagination-left">
+                    <a href="{% url add_url row_id=0 %}" class="pagination-button">Add New Entry</a>
+                </div>
+                <div class=pagination-right">
+                    {% if page_objs.has_previous %}
+                       <a href="?page=1" class="pagination-button">&laquo; First</a>
+                       <a href="?page={{ page_objs.previous_page_number }}" class="pagination-button">Previous</a>
+                    {% else %}
+                       <a href="?page=1" class="pagination-button disabled">&laquo; First</a>
+                       <a href="?page=1" class="pagination-button disabled">Previous</a>
+                    {% endif %}
+                    page {{page_objs.number}} of {{page_objs.paginator.num_pages}}
+                    {% if page_objs.has_next %}
+                       <a href="?page={{ page_objs.next_page_number }}" class="pagination-button">Next</a>
+                       <a href="?page={{ page_objs.paginator.num_pages}}" class="pagination-button">Last &raquo;</a>
+                    {% else %}
+                       <a href="?page=1" class="pagination-button disabled">Next</a>
+                       <a href="?page=1" class="pagination-button disabled">Last &raquo;</a>
+                    {% endif %}
+                </div>
+            </div>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="{% static 'js/support.js' %}" defer></script>
+</head>
+<body>
+<div class="dashboard-container">
+    {% include "sidebar.html" %}
+
+    {% block main-content %}
+    {% endblock %}
+</div>
+
+{% if addModal %}
+    {% include "modal_control.html" %}
+{% endif %}
+
+</body>
+</html>

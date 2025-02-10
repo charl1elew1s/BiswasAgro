@@ -20,7 +20,9 @@ class Cost(models.Model):
         db_table = 'cost'
 
     def __str__(self):
-        return f"id={self.id} date={self.date} costcateogry={self.costcategory} costitems={self.costitems}"
+        return (f"id={self.id} date={self.date} costcategory={self.costcategory} costitems={self.costitems} "
+                f"buyamount={self.buyamount} unit={self.unit} cost={self.cost} buyer={self.buyer} "
+                f"buyvoucher={self.buyvoucher} comment={self.comment} logs={self.logs}")
 
 
 class Costitems(models.Model):

@@ -6,9 +6,6 @@ from .forms import FishbuyForm
 def enter_fishbuy(request):
     form = FishbuyForm()
     if request.method == 'POST':
-        # CL: ++
-        print(request.POST)
-        # CL: --
         form = FishbuyForm(request.POST)
     context = {'form': form}
     return render(request, 'fishbuy.html', context)
