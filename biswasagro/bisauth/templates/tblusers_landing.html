@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Users Table
+{% endblock %}
+
+{% block main-content %}
+        <div class="table-wrapper">
+            <h2>Users Table</h2>
+            <div class="table-container">
+                <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <th>Roleid</th>
+                            <th>Isactive</th>
+                            <th>Created_at</th>
+                            <th>Updated_at</th>
+                            <th>Actions</th>
+                        </tr>
+                    <tbody>
+                    {% for a_page in page_objs %}
+                        <tr>
+                            <td>{{ a_page.name }}</td>
+                            <td>{{ a_page.username }}</td>
+                            <td>{{ a_page.email }}</td>
+                            <td>{{ a_page.mobile }}</td>
+                            <td>{{ a_page.roleid }}</td>
+                            <td>{{ a_page.isActive }}</td>
+                            <td>{{ a_page.created_at }}</td>
+                            <td>{{ a_page.updated_at }}</td>
+                            <td>
+                                <a href="{% url 'bisauth:addup_tblusers' row_id=a_page.id %}" class="action-link">Edit</a> |
+                                <a href="#" class="action-link delete-table-entry" table-id="bisauth/tblusers" data-id="{{a_page.id}}">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+{% include 'pagination_control.html' %}
+
+{% endblock %}

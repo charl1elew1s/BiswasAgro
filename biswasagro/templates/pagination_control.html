@@ -1,6 +1,8 @@
             <div class="pagination-container">
                 <div class="pagination-left">
-                    <a href="{% url add_url row_id=0 %}" class="pagination-button">Add New Entry</a>
+                    {% if not skipButton  %}
+                        <a href="{% url add_url row_id=0 %}" class="pagination-button">Add New Entry</a>
+                    {% endif %}
                 </div>
                 <div class=pagination-right">
                     {% if page_objs.has_previous %}

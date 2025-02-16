@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Cost Table
+{% endblock %}
+
+{% block main-content %}
+        <div class="table-wrapper">
+            <h2>Roles Table</h2>
+            <div class="table-container">
+                <table>
+                        <tr>
+                            <th>ID</th>
+                            <th>Role</th>
+                            <th>Action</th>
+                        </tr>
+                    <tbody>
+                    {% for a_page in page_objs %}
+                        <tr>
+                            <td>{{a_page.id}}</td>
+                            <td>{{a_page.role}}</td>
+                            <td>
+                                <a href="{% url 'bisauth:addup_tblroles' row_id=a_page.id %}" class="action-link">Edit</a> |
+                                <a href="#" class="action-link delete-table-entry" table-id="bisauth/tblroles" data-id="{{a_page.id}}">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+{% include 'pagination_control.html' %}
+
+{% endblock %}

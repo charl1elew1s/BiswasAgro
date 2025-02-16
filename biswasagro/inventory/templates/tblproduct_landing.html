@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Product Table
+{% endblock %}
+
+{% block main-content %}
+        <div class="table-wrapper">
+            <h2>Product Table</h2>
+            <div class="table-container">
+                <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Prix</th>
+                            <th>Categorie</th>
+                            <th>Etat</th>
+                            <th>Actions</th>
+                        </tr>
+                    <tbody>
+                    {% for a_page in page_objs %}
+                        <tr>
+                            <td>{{ a_page.name }}</td>
+                            <td>{{ a_page.prix }}</td>
+                            <td>{{ a_page.categorie }}</td>
+                            <td>{{ a_page.etat }}</td>
+                            <td>
+                                <a href="{% url 'inv:addup_tblproduct' row_id=a_page.id %}" class="action-link">Edit</a> |
+                                <a href="#" class="action-link delete-table-entry" table-id="inv/tblproduct" data-id="{{a_page.id}}">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+{% include 'pagination_control.html' %}
+
+{% endblock %}

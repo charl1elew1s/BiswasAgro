@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Earning Entry
+{% endblock %}
+
+{% block main-content %}
+<div class="form-container">
+    <div class="form-box">
+        <h2>{{heading}}</h2>
+            <form action="{% url 'costs:addup_earning' row_id=row_id %}" method="post">
+                {% csrf_token %}
+                <label for="{{ form.date.id_for_label }}">{{ form.date.label }}:</label>
+                {{ form.date }}
+                {{ form.date.errors }}
+
+                <label for="{{ form.sector.id_for_label }}">{{ form.sector.label }}:</label>
+                {{ form.sector }}
+                {{ form.sector.errors }}
+
+                <label for="{{ form.item.id_for_label }}">{{ form.item.label }}:</label>
+                {{ form.item }}
+                {{ form.item.errors }}
+
+                <label for="{{ form.source.id_for_label }}">{{ form.source.label }}:</label>
+                {{ form.source }}
+                {{ form.source.errors }}
+
+                <label for="{{ form.quantity_per_unit.id_for_label }}">{{ form.quantity_per_unit.label }}:</label>
+                {{ form.quantity_per_unit }}
+                {{ form.quantity_per_unit.errors }}
+
+                <label for="{{ form.quantity.id_for_label }}">{{ form.quantity.label }}:</label>
+                {{ form.quantity }}
+                {{ form.quantity.errors }}
+
+                <label for="{{ form.unit.id_for_label }}">{{ form.unit.label }}:</label>
+                {{ form.unit }}
+                {{ form.unit.errors }}
+
+                <label for="{{ form.price.id_for_label }}">{{ form.price.label }}:</label>
+                {{ form.price }}
+                {{ form.price.errors }}
+
+                <label for="{{ form.memo.id_for_label }}">{{ form.memo.label }}:</label>
+                {{ form.memo }}
+                {{ form.memo.errors }}
+
+                <label for="{{ form.comment.id_for_label }}">{{ form.comment.label }}:</label>
+                {{ form.comment }}
+                {{ form.comment.errors }}
+
+<!--                <label for="{{ form.logs.id_for_label }}">{{ form.logs.label }}:</label>-->
+<!--                {{ form.logs }}-->
+<!--                {{ form.logs.errors }}-->
+
+            <div class="button-group">
+                <button type="button" onclick="history.back()" class="cancel-btn">Cancel</button>
+                <button type="submit" class="save-btn">Save</button>
+            </div>
+</form>
+</div>
+
+{% endblock %}

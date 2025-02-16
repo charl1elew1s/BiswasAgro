@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Land Table
+{% endblock %}
+
+{% block main-content %}
+        <div class="table-wrapper">
+            <h2>Land Table</h2>
+            <div class="table-container">
+                <table>
+                        <tr>
+                            <th>Mousa</th>
+                            <th>Dag</th>
+                            <th>Khotian</th>
+                            <th>Amount</th>
+                            <th>Plane_land</th>
+                            <th>Par_cannel</th>
+                            <th>Owners</th>
+                            <th>Comment</th>
+                            <th>Logs</th>
+                            <th>Actions</th>
+                        </tr>
+                    <tbody>
+                    {% for a_page in page_objs %}
+                        <tr>
+                            <td>{{ a_page.mousa }}</td>
+                            <td>{{ a_page.dag }}</td>
+                            <td>{{ a_page.khotian }}</td>
+                            <td>{{ a_page.amount }}</td>
+                            <td>{{ a_page.plane_land }}</td>
+                            <td>{{ a_page.par_cannel }}</td>
+                            <td>{{ a_page.owners }}</td>
+                            <td>{{ a_page.comment }}</td>
+                            <td>{{ a_page.logs }}</td>
+                            <td>
+                                <a href="{% url 'inv:addup_land' row_id=a_page.id %}" class="action-link">Edit</a> |
+                                <a href="#" class="action-link delete-table-entry" table-id="inv/land" data-id="{{a_page.id}}">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+{% include 'pagination_control.html' %}
+
+{% endblock %}

@@ -21,7 +21,7 @@ class TblUsers(models.Model):
     password = models.CharField(max_length=255, blank=True, null=True)
     mobile = models.CharField(max_length=25, blank=True, null=True)
     roleid = models.IntegerField(blank=True, null=True)
-    isactive = models.IntegerField(db_column='isActive', blank=True, null=True)  # Field name made lowercase.
+    isActive = models.IntegerField(db_column='isActive', blank=True, null=True)  # Field name made lowercase.
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
 

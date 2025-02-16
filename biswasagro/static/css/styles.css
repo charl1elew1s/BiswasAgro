@@ -5,33 +5,40 @@ body {
     font-family: Arial, sans-serif;
     color: #d4af37;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    align-items: flex-start;
+    min-height: 100vh;
 }
+
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    padding: 20px;
+}
+
 
 .form-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50%;
+    /*justify-content: center;*/
+    align-items: flex-start;
+    width: calc(100%, -250px);
+    padding: 20px;
+    margin: 0;
     /* margin-top: 450px; */
-    margin-top: 12%; 
+    /*margin-top: 12%; */
 }
 
 .form-box {
     background-color: #222;
-    /* padding: 25px;
-    border-radius: 12px;
-    width: 600px; */
-
     font-size: 11px;
     padding: 25px;
     border-radius: 12px;
     border: 5px;
     width: 300px;
-
-
     text-align: center;
 }
 
@@ -95,19 +102,21 @@ body {
 .dashboard-container {
     display: flex;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    flex-grow: 1;
 }
 
 .sidebar {
     width: 250px;
     background-color: #222;
     padding: 20px;
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
+/*
 .sidebar button {
     width: 100%;
     padding: 10px;
@@ -122,6 +131,7 @@ body {
 .sidebar button:hover {
     background-color: #b08c27;
 }
+*/
 
 .home-container {
     display: flex;
@@ -340,7 +350,7 @@ td {
     width: 700px;
     height: 40px;
 }
-
+/*
 .sidebar-button {
     display: inline-block;
     width: 80%; 
@@ -353,9 +363,32 @@ td {
     border-radius: 5px;
     text-decoration: none;
 }
+end orig */
+
+.sidebar-button {
+    display: block;
+    width: 100%; 
+    padding: 10px;
+    background-color: #d4af37;
+    color: black;
+    font-weight: bold;
+    font-size: 15px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
 
 .sidebar-button:hover {
     background-color: #b08c27;
+}
+
+.sidebar-button.disabled {
+    opacity: 0.5; /* Makes it look greyed out */
+    cursor: not-allowed;
+    background-color: #d4af37; /* Keeps it gold */
+    pointer-events: none; /* Prevents clicking */
 }
 
 .pagination-container {

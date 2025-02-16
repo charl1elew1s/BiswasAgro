@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Fishbuy Table
+{% endblock %}
+
+{% block main-content %}
+        <div class="table-wrapper">
+            <h2>Fishbuy Table</h2>
+            <div class="table-container">
+                <table>
+                        <tr>
+                            <th>Date</th>
+                            <th>Fish Name</th>
+                            <th>Buy From</th>
+                            <th>Buy Amount</th>
+                            <th>Fish Quantity</th>
+                            <th>Price</th>
+                            <th>Fish To</th>
+                            <th>Voucher</th>
+                            <th>Comments</th>
+                            <th>Logs</th>
+                            <th>Actions</th>
+                        </tr>
+                    <tbody>
+                    {% for a_page in page_objs %}
+                        <tr>
+                            <td>{{a_page.date}}</td>
+                            <td>{{a_page.fishname}}</td>
+                            <td>{{a_page.buyfrom}}</td>
+                            <td>{{a_page.buyamount}}</td>
+                            <td>{{a_page.fishquantity}}</td>
+                            <td>{{a_page.price}}</td>
+                            <td>{{a_page.fishto}}</td>
+                            <td>{{a_page.fouchar}}</td>
+                            <td>{{a_page.comments}}</td>
+                            <td>{{a_page.logs}}</td>
+                            <td>
+                                <a href="{% url 'inv:addup_fishbuy' row_id=a_page.id %}" class="action-link">Edit</a> |
+                                <a href="#" class="action-link delete-table-entry" table-id="inv/fishbuy" data-id="{{a_page.id}}">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+{% include 'pagination_control.html' %}
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Fishbuy Entry
+{% endblock %}
+
+{% block main-content %}
+<div class="form-container">
+    <div class="form-box">
+        <h2>{{heading}}</h2>
+            <form action="{% url 'inv:addup_fishbuy' row_id=row_id %}" method="post">
+                {% csrf_token %}
+                <label for="{{ form.date.id_for_label }}">{{ form.date.label }}:</label>
+                {{ form.date }}
+                {{ form.date.errors }}
+
+                <label for="{{ form.fishname.id_for_label}}">{{form.fishname.label}}:</label>
+                {{ form.fishname }}
+                {{ form.fishname.errors }}
+
+                <label for="{{ form.buyfrom.id_for_label}}">{{form.buyfrom.label}}:</label>
+                {{form.buyfrom}}
+                {{form.buyfrom.errors}}
+
+                <label for="{{ form.buyamount.id_for_label}}">{{form.buyamount.label}}:</label>
+                {{ form.buyamount }}
+                {{ form.buyamount.errors }}
+
+                <label for="{{ form.fishquantity.id_for_label}}">{{form.fishquantity.label}}:</label>
+                {{ form.fishquantity }}
+                {{ form.fishquantity.errors }}
+
+                <label for="{{ form.price.id_for_label}}">{{form.price.label}}:</label>
+                {{ form.price }}
+                {{ form.price.errors }}
+
+                <label for="{{ form.fishto.id_for_label}}">{{form.fishto.label}}:</label>
+                {{ form.fishto }}
+                {{ form.fishto.errors }}
+
+                <label for="{{ form.vouchar.id_for_label}}">{{form.vouchar.label}}:</label>
+                {{ form.vouchar }}
+                {{ form.vouchar.errors }}
+
+                <label for="{{ form.comments.id_for_label}}">{{form.comments.label}}:</label>
+                {{ form.comments }}
+                {{ form.comments.errors }}
+
+            <div class="button-group">
+                <button type="button" onclick="history.back()" class="cancel-btn">Cancel</button>
+                <button type="submit" class="save-btn">Save</button>
+            </div>
+</form>
+</div>
+
+{% endblock %}

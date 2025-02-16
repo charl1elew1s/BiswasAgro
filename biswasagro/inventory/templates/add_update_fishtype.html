@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Fishtype Entry
+{% endblock %}
+
+{% block main-content %}
+<div class="form-container">
+    <div class="form-box">
+        <h2>{{heading}}</h2>
+            <form action="{% url 'inv:addup_fishtype' row_id=row_id %}" method="post">
+                {% csrf_token %}
+
+                <label for="{{ form.fishname.id_for_label }}">{{ form.fishname.label }}:</label>
+                {{ form.fishname }}
+                {{ form.fishname.errors }}
+
+            <div class="button-group">
+                <button type="button" onclick="history.back()" class="cancel-btn">Cancel</button>
+                <button type="submit" class="save-btn">Save</button>
+            </div>
+</form>
+</div>
+
+{% endblock %}

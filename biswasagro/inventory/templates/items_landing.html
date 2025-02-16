@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Items Table
+{% endblock %}
+
+{% block main-content %}
+        <div class="table-wrapper">
+            <h2>Items Table</h2>
+            <div class="table-container">
+                <table>
+                        <tr>
+                            <th>Sector</th>
+                            <th>Item name</th>
+                            <th>Logs</th>
+                            <th>Actions</th>
+                        </tr>
+                    <tbody>
+                    {% for a_page in page_objs %}
+                        <tr>
+                            <td>{{ a_page.sector }}</td>
+                            <td>{{ a_page.item_name }}</td>
+                            <td>{{ a_page.logs }}</td>
+                            <td>
+                                <a href="{% url 'inv:addup_items' row_id=a_page.id %}" class="action-link">Edit</a> |
+                                <a href="#" class="action-link delete-table-entry" table-id="inv/items" data-id="{{a_page.id}}">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+{% include 'pagination_control.html' %}
+
+{% endblock %}

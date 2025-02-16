@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Units Table
+{% endblock %}
+
+{% block main-content %}
+        <div class="table-wrapper">
+            <h2>Units Table</h2>
+            <div class="table-container">
+                <table>
+                        <tr>
+                            <th>Unit</th>
+                            <th>Logs</th>
+                            <th>Actions</th>
+                        </tr>
+                    <tbody>
+                    {% for a_page in page_objs %}
+                        <tr>
+                            <td>{{ a_page.unit }}</td>
+                            <td>{{ a_page.logs }}</td>
+                            <td>
+                                <a href="{% url 'inv:addup_units' row_id=a_page.id %}" class="action-link">Edit</a> |
+                                <a href="#" class="action-link delete-table-entry" table-id="inv/units" data-id="{{a_page.id}}">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+{% include 'pagination_control.html' %}
+
+{% endblock %}

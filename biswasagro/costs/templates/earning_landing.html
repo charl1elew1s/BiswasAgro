@@ -1,23 +1,24 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-Cost Table
+Earning Table
 {% endblock %}
 
 {% block main-content %}
         <div class="table-wrapper">
-            <h2>Cost Table</h2>
+            <h2>Earning Table</h2>
             <div class="table-container">
                 <table>
                         <tr>
                             <th>Date</th>
-                            <th>Category</th>
-                            <th>Items</th>
-                            <th>Amount</th>
+                            <th>Sector</th>
+                            <th>Item</th>
+                            <th>Source</th>
+                            <th>Quantity per unit</th>
+                            <th>Quantity</th>
                             <th>Unit</th>
-                            <th>Cost</th>
-                            <th>Buyer</th>
-                            <th>Voucher</th>
+                            <th>Price</th>
+                            <th>Memo</th>
                             <th>Comment</th>
                             <th>Logs</th>
                             <th>Actions</th>
@@ -26,18 +27,19 @@ Cost Table
                     {% for a_page in page_objs %}
                         <tr>
                             <td>{{a_page.date}}</td>
-                            <td>{{a_page.costcategory}}</td>
-                            <td>{{a_page.costitems}}</td>
-                            <td>{{a_page.buyamount}}</td>
+                            <td>{{a_page.sector}}</td>
+                            <td>{{a_page.item}}</td>
+                            <td>{{a_page.source}}</td>
+                            <td>{{a_page.quantity_per_unit}}</td>
+                            <td>{{a_page.quantity}}</td>
                             <td>{{a_page.unit}}</td>
-                            <td>{{a_page.cost}}</td>
-                            <td>{{a_page.buyer}}</td>
-                            <td>{{a_page.buyvoucher}}</td>
+                            <td>{{a_page.price}}</td>
+                            <td>{{a_page.memo}}</td>
                             <td>{{a_page.comment}}</td>
                             <td>{{a_page.logs}}</td>
                             <td>
-                                <a href="{% url 'costs:addup_cost' row_id=a_page.id %}" class="action-link">Edit</a> |
-                                <a href="#" class="action-link delete-table-entry" table-id="costs/cost" data-id="{{a_page.id}}">Delete</a>
+                                <a href="{% url 'costs:addup_earning' row_id=a_page.id %}" class="action-link">Edit</a> |
+                                <a href="#" class="action-link delete-table-entry" table-id="costs/earning" data-id="{{a_page.id}}">Delete</a>
                             </td>
                         </tr>
                     {% endfor %}

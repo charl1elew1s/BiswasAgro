@@ -1,17 +1,18 @@
         <div class="sidebar">
             <a href="{% url 'home' %}" class="sidebar-button">Home</a>
             <a href="{% url 'costs:show_cost_table' %}" class="sidebar-button">Cost Table</a>
-            <a href="/" class="sidebar-button">Cost Purpose Table</a>
-            <a href="/" class="sidebar-button">Earning</a>
-            <a href="/" class="sidebar-button">Fishbuy</a>
-            <a href="/" class="sidebar-button">Fishtype</a>
-            <a href="/" class="sidebar-button">Investment</a>
-            <a href="/" class="sidebar-button">Items</a>
-            <a href="/" class="sidebar-button">Land</a>
-            <a href="/" class="sidebar-button">Sectors</a>
-            <a href="/" class="sidebar-button">Product</a>
-            <a href="/" class="sidebar-button">Roles</a>
-            <a href="/" class="sidebar-button">Units</a>
-            <a href="/" class="sidebar-button">Users</a>
+            <a href="{% url 'costs:show_costitems_table' %}" class="sidebar-button">Cost Items Table</a>
+            <a href="{% url 'costs:show_costpurpose_table' %}" class="sidebar-button">Cost Purpose Table</a>
+            <a href="{% url 'costs:show_earning_table' %}" class="sidebar-button">Earning</a>
+            <a href="{% url 'costs:show_investment_table' %}" class="sidebar-button">Investment</a>
+            <a href="{% url 'inv:show_fishbuy_table' %}" class="sidebar-button">Fishbuy</a>
+            <a href="{% url 'inv:show_fishtype_table' %}" class="sidebar-button">Fishtype</a>
+            <a href="{% url 'inv:show_items_table' %}" class="sidebar-button">Items</a>
+            <a href="{% url 'inv:show_land_table' %}" class="sidebar-button">Land</a>
+            <a href="{% url 'inv:show_sectors_table' %}" class="sidebar-button">Sectors</a>
+            <a href="{% url 'inv:show_tblproduct_table' %}" class="sidebar-button">Product</a>
+            <a href="{% url 'inv:show_units_table' %}" class="sidebar-button">Units</a>
+            <a href="{% url 'bisauth:show_tblroles_table' %}" class="sidebar-button">Roles</a>
+            <a href="{% url 'bisauth:show_tblusers_table' %}" class="sidebar-button">Users</a>
             <a href="/" class="sidebar-button">Log Out</a>
         </div>

@@ -23,4 +23,5 @@ urlpatterns = [
     path('', views.home_page, name='home'),
     path('costs/', include("costs.urls")),
     path('inv/', include('inventory.urls')),
+    path('bisauth/', include('bisauth.urls')),
 ]
