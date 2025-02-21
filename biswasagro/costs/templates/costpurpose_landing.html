@@ -11,16 +11,22 @@ Cost Purpose Table
                 <table>
                         <tr>
                             <th>Costpurpose</th>
+                            {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <th>Actions</th>
+                            {% endif %}
                         </tr>
                     <tbody>
                     {% for a_page in page_objs %}
                         <tr>
                             <td>{{a_page.costpurpose}}</td>
+                            {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <td>
-                                <a href="{% url 'costs:addup_costpurpose' row_id=a_page.id %}" class="action-link">Edit</a> |
-                                <a href="#" class="action-link delete-table-entry" table-id="costs/costpurpose" data-id="{{a_page.id}}">Delete</a>
+                                <a href="{% url 'costs:addup_costpurpose' row_id=a_page.id %}" class="action-link">Edit</a>
+                                {% endif %}
+                                {% if request.session.user.role == 'Admin' %}
+                                | <a href="#" class="action-link delete-table-entry" table-id="costs/costpurpose" data-id="{{a_page.id}}">Delete</a>
                             </td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>

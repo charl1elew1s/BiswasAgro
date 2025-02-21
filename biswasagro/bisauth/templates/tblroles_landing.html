@@ -12,17 +12,23 @@ Cost Table
                         <tr>
                             <th>ID</th>
                             <th>Role</th>
-                            <th>Action</th>
+                            {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
+                            <th>Actions</th>
+                            {% endif %}
                         </tr>
                     <tbody>
                     {% for a_page in page_objs %}
                         <tr>
                             <td>{{a_page.id}}</td>
                             <td>{{a_page.role}}</td>
+                            {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <td>
-                                <a href="{% url 'bisauth:addup_tblroles' row_id=a_page.id %}" class="action-link">Edit</a> |
-                                <a href="#" class="action-link delete-table-entry" table-id="bisauth/tblroles" data-id="{{a_page.id}}">Delete</a>
+                                <a href="{% url 'bisauth:addup_tblroles' row_id=a_page.id %}" class="action-link">Edit</a>
+                                {% endif %}
+                                {% if request.session.user.role == 'Admin' %}
+                                | <a href="#" class="action-link delete-table-entry" table-id="bisauth/tblroles" data-id="{{a_page.id}}">Delete</a>
                             </td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>

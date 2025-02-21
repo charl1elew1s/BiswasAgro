@@ -19,8 +19,9 @@ Cost Table
                             <th>Buyer</th>
                             <th>Voucher</th>
                             <th>Comment</th>
-                            <th>Logs</th>
+                            {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <th>Actions</th>
+                            {% endif %}
                         </tr>
                     <tbody>
                     {% for a_page in page_objs %}
@@ -34,11 +35,14 @@ Cost Table
                             <td>{{a_page.buyer}}</td>
                             <td>{{a_page.buyvoucher}}</td>
                             <td>{{a_page.comment}}</td>
-                            <td>{{a_page.logs}}</td>
+                            {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <td>
-                                <a href="{% url 'costs:addup_cost' row_id=a_page.id %}" class="action-link">Edit</a> |
-                                <a href="#" class="action-link delete-table-entry" table-id="costs/cost" data-id="{{a_page.id}}">Delete</a>
+                                <a href="{% url 'costs:addup_cost' row_id=a_page.id %}" class="action-link">Edit</a>
+                            {% endif %}
+                            {% if request.session.user.role == 'Admin' %}
+                                 | <a href="#" class="action-link delete-table-entry" table-id="costs/cost" data-id="{{a_page.id}}">Delete</a>
                             </td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>

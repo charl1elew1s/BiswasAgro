@@ -15,10 +15,10 @@ Users Table
                             <th>Email</th>
                             <th>Mobile</th>
                             <th>Roleid</th>
-                            <th>Isactive</th>
-                            <th>Created_at</th>
-                            <th>Updated_at</th>
+                            <th>Is Active</th>
+                            {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <th>Actions</th>
+                            {% endif %}
                         </tr>
                     <tbody>
                     {% for a_page in page_objs %}
@@ -28,13 +28,15 @@ Users Table
                             <td>{{ a_page.email }}</td>
                             <td>{{ a_page.mobile }}</td>
                             <td>{{ a_page.roleid }}</td>
-                            <td>{{ a_page.isActive }}</td>
-                            <td>{{ a_page.created_at }}</td>
-                            <td>{{ a_page.updated_at }}</td>
+                            <td>{{ a_page.is_active }}</td>
+                            {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <td>
-                                <a href="{% url 'bisauth:addup_tblusers' row_id=a_page.id %}" class="action-link">Edit</a> |
-                                <a href="#" class="action-link delete-table-entry" table-id="bisauth/tblusers" data-id="{{a_page.id}}">Delete</a>
+                                <a href="{% url 'bisauth:addup_tblusers' row_id=a_page.id %}" class="action-link">Edit</a>
+                                {% endif %}
+                                {% if request.session.user.role == 'Admin' %}
+                                | <a href="#" class="action-link delete-table-entry" table-id="bisauth/tblusers" data-id="{{a_page.id}}">Delete</a>
                             </td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>

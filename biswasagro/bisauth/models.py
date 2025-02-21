@@ -21,9 +21,9 @@ class TblUsers(models.Model):
     password = models.CharField(max_length=255, blank=True, null=True)
     mobile = models.CharField(max_length=25, blank=True, null=True)
     roleid = models.IntegerField(blank=True, null=True)
-    isActive = models.IntegerField(db_column='isActive', blank=True, null=True)  # Field name made lowercase.
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    is_active = models.IntegerField(db_column='isActive', blank=True, null=True)  # Field name made lowercase.
+    created_at = models.DateTimeField(null=False, blank=True)
+    updated_at = models.DateTimeField(null=False, blank=True)
 
     class Meta:
         managed = False
@@ -32,5 +32,5 @@ class TblUsers(models.Model):
     def __str__(self):
         return (f"id={self.id} name={self.name} username={self.username} "
                 f"email={self.email} password={self.password} mobile={self.mobile} "
-                f"roleid={self.roleid} isactive={self.isactive} "
+                f"roleid={self.roleid} is_active={self.is_active} "
                 f"created_at={self.created_at} updated_at={self.updated_at}")

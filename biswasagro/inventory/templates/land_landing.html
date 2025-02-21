@@ -18,8 +18,9 @@ Land Table
                             <th>Par_cannel</th>
                             <th>Owners</th>
                             <th>Comment</th>
-                            <th>Logs</th>
+                            {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <th>Actions</th>
+                            {% endif %}
                         </tr>
                     <tbody>
                     {% for a_page in page_objs %}
@@ -32,11 +33,14 @@ Land Table
                             <td>{{ a_page.par_cannel }}</td>
                             <td>{{ a_page.owners }}</td>
                             <td>{{ a_page.comment }}</td>
-                            <td>{{ a_page.logs }}</td>
+                            {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <td>
-                                <a href="{% url 'inv:addup_land' row_id=a_page.id %}" class="action-link">Edit</a> |
-                                <a href="#" class="action-link delete-table-entry" table-id="inv/land" data-id="{{a_page.id}}">Delete</a>
+                                <a href="{% url 'inv:addup_land' row_id=a_page.id %}" class="action-link">Edit</a>
+                                {% endif %}
+                                {% if request.session.user.role == 'Admin' %}
+                                | <a href="#" class="action-link delete-table-entry" table-id="inv/land" data-id="{{a_page.id}}">Delete</a>
                             </td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>

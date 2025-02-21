@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - BiswasAgro</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="{% static 'js/support.js' %}" defer></script>
+</head>
+<body>
+    <div class="register-container">
+        <div class="form-box">
+            <h2>BiswasAgro Login</h2>
+            <form action="{% url 'bisauth:login' %}" method="post">
+                {% csrf_token %}
+
+                <label for="{{ form.username.id_for_label }}">{{ form.username.label }}:</label>
+                {{ form.username }}
+                {{ form.username.errors }}
+
+                <label for="{{ form.password.id_for_label }}">{{ form.password.label }}:</label>
+                {{ form.password }}
+                {{ form.password.errors }}
+
+                 {% if form.non_field_errors %}  {# Display non-field errors #}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                {% if new_user %}
+                <ul class="new-user">
+                    <li>account created for username: {{ new_user }}</li>
+                </ul>
+                {% endif %}
+
+                <div>
+                    <button type="submit" class="save-btn">Login</button>
+                    <p>Don't have an account? <a href="{% url 'bisauth:register' %}">Register a new account</a></p>
+                </div>
+
+        </div>
+    </div>
+</body>
+</html>

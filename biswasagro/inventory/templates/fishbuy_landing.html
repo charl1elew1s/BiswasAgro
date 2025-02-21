@@ -19,8 +19,9 @@ Fishbuy Table
                             <th>Fish To</th>
                             <th>Voucher</th>
                             <th>Comments</th>
-                            <th>Logs</th>
+                            {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <th>Actions</th>
+                            {% endif %}
                         </tr>
                     <tbody>
                     {% for a_page in page_objs %}
@@ -34,11 +35,14 @@ Fishbuy Table
                             <td>{{a_page.fishto}}</td>
                             <td>{{a_page.fouchar}}</td>
                             <td>{{a_page.comments}}</td>
-                            <td>{{a_page.logs}}</td>
+                            {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <td>
-                                <a href="{% url 'inv:addup_fishbuy' row_id=a_page.id %}" class="action-link">Edit</a> |
-                                <a href="#" class="action-link delete-table-entry" table-id="inv/fishbuy" data-id="{{a_page.id}}">Delete</a>
+                                <a href="{% url 'inv:addup_fishbuy' row_id=a_page.id %}" class="action-link">Edit</a>
+                                {% endif %}
+                                {% if request.session.user.role == 'Admin' %}
+                                | <a href="#" class="action-link delete-table-entry" table-id="inv/fishbuy" data-id="{{a_page.id}}">Delete</a>
                             </td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>

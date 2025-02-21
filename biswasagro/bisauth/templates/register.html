@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - BiswasAgro</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="{% static 'js/support.js' %}" defer></script>
+</head>
+<body>
+    <div class="register-container">
+        <div class="form-box">
+            <h2>Register a new account</h2>
+            <form action="{% url 'bisauth:register' %}" method="post">
+                {% csrf_token %}
+
+                <label for="{{ form.name.id_for_label }}">{{ form.name.label }}:</label>
+                {{ form.name }}
+                {{ form.name.errors }}
+
+                <label for="{{ form.username.id_for_label }}">{{ form.username.label }}:</label>
+                {{ form.username }}
+                {{ form.username.errors }}
+
+                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label>
+                {{ form.email }}
+                {{ form.email.errors }}
+
+                <label for="{{ form.mobile.id_for_label }}">{{ form.mobile.label }}:</label>
+                {{ form.mobile }}
+                {{ form.mobile.errors }}
+
+                <label for="{{ form.password.id_for_label }}">{{ form.password.label }}:</label>
+                {{ form.password }}
+                {{ form.password.errors }}
+
+                <label for="{{ form.confirm_password.id_for_label }}">{{ form.confirm_password.label }}:</label>
+                {{ form.confirm_password }}
+                {{ form.confirm_password.errors }}
+
+                 {% if form.non_field_errors %}  {# Display non-field errors #}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                <div class="button-group">
+                    <button type="button" onclick="history.back()" class="cancel-btn">Cancel</button>
+                    <button type="submit" class="save-btn">Save</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</body>
+</html>

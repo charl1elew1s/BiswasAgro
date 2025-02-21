@@ -482,3 +482,33 @@ end orig */
     font-size: 14px;
     color: #df6e6e;
 }
+
+/* .button-group { */
+    /* margin-top: 0px; Remove any top margin that might be pushing it down */
+    /* margin-bottom: 10px; Remove any bottom margin */
+    /* padding: 0; Remove any padding */
+/* } */
+
+/* .button-group button { */
+    /* margin-top: 10px; Ensure no top margin on the button itself */
+/* } */
+
+.errorlist {
+    font-size: 1rem;
+    color: rgb(243, 60, 60);
+    list-style-type: none;
+}
+
+.new-user {
+    font-size: 1rem;
+    color: #00aaff;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.new-user li {
+    margin: 0;
+    padding: 0;
+    line-height: 2.2;
+}
