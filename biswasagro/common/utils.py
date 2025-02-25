@@ -53,7 +53,6 @@ def find_update_diffs(request, model_obj, skip_cases=set()):
            'new_value' : {str} [Note: this could be an empty string]
     """
     field_data = []
-
     # if orig is in the session make sure the model_name is the same as "our" model_name if it isn't, it's
     # a leftover remnant that needs to be removed
     if 'orig' in request.session:
