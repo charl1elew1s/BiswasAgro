@@ -9,7 +9,7 @@ from bisauth.models import TblUsers, TblRoles
 # define the order of the User Roles from the least access to most, we use this when creating a new
 # user. The preferred role level is the one that has the least amount of access.
 ROLE_LEVELS = ['User', 'Operator', 'Manager', 'Admin']
-
+ 
 
 #
 # Login
