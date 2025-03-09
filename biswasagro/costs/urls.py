@@ -29,4 +29,9 @@ urlpatterns = [
     path('investment/delete/<int:row_id>', views.investment_delete_row, name='investment_delete_row'),
     path('addup_investment/<int:row_id>', views.add_update_investment, name="addup_investment"),
 
+    # handle the `loandetails` table
+    path('loandetails', views.show_loandetails_table, name='show_loandetails_table'),
+    path('loandetails/delete/<int:row_id>', views.loandetails_delete_row, name='loandetails_delete_row'),
+    path('addup_loandetails/<int:row_id>', views.add_update_loandetails, name="addup_loandetails"),
+
 ]

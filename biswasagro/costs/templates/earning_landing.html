@@ -1,21 +1,22 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-Earning Table
+Earnings Table
 {% endblock %}
 
 {% block main-content %}
         <div class="table-wrapper">
-            <h2>Earning Table</h2>
+            <h2>Earnings Table</h2>
             <div class="table-container">
                 <table>
                         <tr>
                             <th>Date</th>
+                            <th>Status</th>
                             <th>Sector</th>
                             <th>Item</th>
                             <th>Source</th>
-                            <th>Quantity per unit</th>
-                            <th>Quantity</th>
+                            <th>Qty per unit</th>
+                            <th>Qty</th>
                             <th>Unit</th>
                             <th>Price</th>
                             <th>Memo</th>
@@ -28,6 +29,7 @@ Earning Table
                     {% for a_page in page_objs %}
                         <tr>
                             <td>{{a_page.date}}</td>
+                            <td>{{a_page.status}}</td>
                             <td>{{a_page.sector}}</td>
                             <td>{{a_page.item}}</td>
                             <td>{{a_page.source}}</td>

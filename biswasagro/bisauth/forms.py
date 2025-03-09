@@ -1,36 +1,102 @@
 from django import forms
 from django.forms import ModelForm, Form
-from .models import TblUsers, TblRoles
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.hashers import check_password
+from .models import Roles, Usersinfo, Staff, Staffs, Salary
 
 
-class TblUsersForm(ModelForm):
+class UsersInfoForm(ModelForm):
     class Meta:
-        model = TblUsers
-        fields = ['name', 'username', 'email', 'password', 'mobile', 'roleid', 'is_active',
-                  'created_at', 'updated_at',]
+        model = Usersinfo
+        fields = ['name', 'username', 'role', 'isactive', 'email', 'mobile']
 
         labels = {
-           'name': 'Name',
-           'username': 'Username',
-           'email': 'Email',
-           'password': 'Password',
-           'mobile': 'Mobile Number',
-           'roleid': 'Role ID',
-           'is_active': 'Is Active',
-           'created_at': 'Created At',
-           'updated_at': 'Updated At',
+            'name': 'Name',
+            'username': 'Username',
+            'role': 'Role',
+            'isactive': 'Is Active',
+            'email': 'Email',
+            'mobile': 'Mobile'
+        }
+        error_messages = {
+            'name': {
+                'unique': 'User with that name already exists.',
+            },
+            'username': {
+                'unique': 'User with that username already exists.',
+            },
         }
 
 
-class TblRolesForm(ModelForm):
+class RolesForm(ModelForm):
     class Meta:
-        model = TblRoles
+        model = Roles
         fields = ['role']
 
         labels = {
             'role': 'Role'
+        }
+        error_messages = {
+            'role': {
+                'unique': 'Role with that name already exists.',
+            },
+        }
+
+
+class SalaryForm(ModelForm):
+    date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'})  # Use an HTML5 date picker
+    )
+
+    class Meta:
+        model = Salary
+        fields = ['date', 'purpose', 'reason', 'quantity', 'rate', 'total', 'personel',
+                  'voucher', 'status', 'comment', ]
+
+        labels = {
+            'date': 'Date',
+            'purpose': 'Purpose',
+            'reason': 'Reason',
+            'quantity': 'Quantity',
+            'rate': 'Rate',
+            'total': 'total',
+            'personel': 'Personnel',
+            'voucher': 'Voucher',
+            'status': 'Status',
+            'comment': 'Additional comments'
+        }
+
+
+class StaffForm(ModelForm):
+    class Meta:
+        model = Staff
+        fields = ['name', 'post', 'salary', 'address', 'mobile', 'reference',]
+
+        labels = {
+            'name': 'Name',
+            'post': 'Post',
+            'salary': 'Salary',
+            'address': 'Address',
+            'mobile': 'Mobile',
+            'reference': 'Reference',
+        }
+        error_messages = {
+            'name': {
+                'unique': 'Staff member with that name already exists.',
+            },
+        }
+
+
+class StaffsForm(ModelForm):
+    class Meta:
+        model = Staffs
+        fields = ['name', 'designation', 'address', 'mobile',]
+
+        labels = {
+            'name': 'Name',
+            'designation': 'Designation',
+            'address': 'Address',
+            'mobile': 'Mobile',
         }
 
 
@@ -39,8 +105,12 @@ class RegistrationForm(ModelForm):
     confirm_password = forms.CharField(widget=forms.PasswordInput, required=True)
 
     class Meta:
-        model = TblUsers
+        model = Usersinfo
         fields = ['name', 'username', 'email', 'mobile', 'password', 'confirm_password']
+
+        widgets = {
+            'mobile': forms.TextInput(attrs={'maxlength': 20})
+        }
 
         labels = {
             'name': 'Name',
@@ -59,15 +129,14 @@ class RegistrationForm(ModelForm):
         if password != confirm_password:
             raise forms.ValidationError("Passwords do not match.")
 
-        # check if the username and email (if present) already exist in the system
+        # check if the username and email already exist in the system
         username = cleaned_data.get('username')
-        if TblUsers.objects.filter(username=username).exists():
+        if Usersinfo.objects.filter(username=username).exists():
             raise forms.ValidationError("Username already exists.")
 
-        if 'email' in cleaned_data:
-            email = cleaned_data.get('email')
-            if TblUsers.objects.filter(email=email).exists():
-                raise forms.ValidationError("Email already exists.")
+        email = cleaned_data.get('email')
+        if Usersinfo.objects.filter(email=email).exists():
+            raise forms.ValidationError("Email already exists.")
 
         return cleaned_data
 
@@ -82,12 +151,12 @@ class LoginForm(Form):
         password = cleaned_data.get('password')
 
         # see if the user exists
-        qs = TblUsers.objects.filter(username=username)
+        qs = Usersinfo.objects.filter(username=username)
         if not qs.exists():
             raise forms.ValidationError("Username does not exist.")
 
         user = qs[0]
-        if not user.is_active:
+        if not user.isactive:
             raise forms.ValidationError(f"User: {user.username} is inactive")
 
         # check the password with the hash in the database

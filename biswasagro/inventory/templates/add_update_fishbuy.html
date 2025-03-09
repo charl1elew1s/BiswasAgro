@@ -14,8 +14,16 @@ BiswasAgro - Fishbuy Entry
                 {{ form.date }}
                 {{ form.date.errors }}
 
-                <label for="{{ form.fishname.id_for_label}}">{{form.fishname.label}}:</label>
-                {{ form.fishname }}
+                <label for="{{ form.fishname.id_for_label }}">{{form.fishname.label}}:</label>
+                <select name="{{form.fishname.name}}" id="{{ form.fishname.id_for_label }}">
+                    {% for fish_name in fish_names %}
+                      {% if request.session.orig.fishname == fish_name %}
+                         <option value="{{ fish_name }}" selected>{{ fish_name }}</option>
+                      {% else %}
+                         <option value="{{ fish_name }}">{{ fish_name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
                 {{ form.fishname.errors }}
 
                 <label for="{{ form.buyfrom.id_for_label}}">{{form.buyfrom.label}}:</label>
@@ -34,9 +42,30 @@ BiswasAgro - Fishbuy Entry
                 {{ form.price }}
                 {{ form.price.errors }}
 
-                <label for="{{ form.fishto.id_for_label}}">{{form.fishto.label}}:</label>
-                {{ form.fishto }}
+                <label for="{{ form.fishto.id_for_label }}">{{form.fishto.label}}:</label>
+                <select name="{{form.fishto.name}}" id="{{ form.fishto.id_for_label }}">
+                    {% for src in sources %}
+                      {% if request.session.orig.fishto == src %}
+                         <option value="{{ src }}" selected>{{ src }}</option>
+                      {% else %}
+                         <option value="{{ src }}">{{ src }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
                 {{ form.fishto.errors }}
+
+                <label for="{{ form.status.id_for_label }}">{{form.status.label}}:</label>
+                <select name="{{form.status.name}}" id="{{ form.status.id_for_label }}">
+                    {% for stat_id, stat_name in status.items %}
+                      {% if request.session.orig.status == stat_id %}
+                         <option value="{{ stat_id }}" selected>{{ stat_name }}</option>
+                      {% else %}
+                         <option value="{{ stat_id }}">{{ stat_name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.fishto.errors }}
+
 
                 <label for="{{ form.vouchar.id_for_label}}">{{form.vouchar.label}}:</label>
                 {{ form.vouchar }}

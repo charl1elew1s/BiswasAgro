@@ -31,14 +31,19 @@ urlpatterns = [
     path('addup_sectors/<int:row_id>', views.add_update_sectors, name="addup_sectors"),
     path('sectors/delete/<int:row_id>', views.sectors_delete_row, name='sectors_delete_row'),
 
-    # handle the `tblproduct` table
-    path('tblproduct', views.show_tblproduct_table, name='show_tblproduct_table'),
-    path('addup_tblproduct/<int:row_id>', views.add_update_tblproduct, name="addup_tblproduct"),
-    path('tblproduct/delete/<int:row_id>', views.tblproduct_delete_row, name='tblproduct_delete_row'),
-
     # handle the `units` table
     path('units', views.show_units_table, name='show_units_table'),
     path('addup_units/<int:row_id>', views.add_update_units, name="addup_units"),
     path('units/delete/<int:row_id>', views.units_delete_row, name='units_delete_row'),
+
+    # handle the `dailyworks` table
+    path('dailyworks', views.show_dailyworks_table, name='show_dailyworks_table'),
+    path('addup_dailyworks/<int:row_id>', views.add_update_dailyworks, name="addup_dailyworks"),
+    path('dailyworks/delete/<int:row_id>', views.dailyworks_delete_row, name='dailyworks_delete_row'),
+
+    # handle the `fooddistribution` table
+    path('fooddist', views.show_fooddistribution_table, name='show_fooddistribution_table'),
+    path('addup_fooddistribution/<int:row_id>', views.add_update_fooddistribution, name="addup_fooddistribution"),
+    path('fooddistribution/delete/<int:row_id>', views.fooddistribution_delete_row, name='fooddistribution_delete_row'),
 
 ]

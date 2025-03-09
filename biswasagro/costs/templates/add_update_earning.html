@@ -14,16 +14,52 @@ BiswasAgro - Earning Entry
                 {{ form.date }}
                 {{ form.date.errors }}
 
+                <label for="{{ form.status.id_for_label}}">{{form.status.label}}:</label>
+                <select name="{{form.status.name}}" id="{{ form.status.id_for_label}}">
+                    {% for stat_id, stat_name in status.items %}
+                      {% if request.session.orig.status == stat_id %}
+                         <option value="{{ stat_id }}" selected>{{ stat_name }}</option>
+                      {% else %}
+                         <option value="{{ stat_id }}">{{ stat_name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.status.errors }}
+
                 <label for="{{ form.sector.id_for_label }}">{{ form.sector.label }}:</label>
-                {{ form.sector }}
+                <select name="{{form.sector.name}}" id="{{ form.sector.id_for_label }}">
+                    {% for sec_id, sec_name in sectors.items %}
+                      {% if request.session.orig.sector == sec_id %}
+                         <option value="{{ sec_id }}" selected>{{ sec_name }}</option>
+                      {% else %}
+                         <option value="{{ sec_id }}">{{ sec_name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
                 {{ form.sector.errors }}
 
                 <label for="{{ form.item.id_for_label }}">{{ form.item.label }}:</label>
-                {{ form.item }}
+                <select name="{{form.item.name}}" id="{{ form.item.id_for_label }}">
+                    {% for item_id, item_name in items.items %}
+                      {% if request.session.orig.item == item_id %}
+                         <option value="{{ item_id }}" selected>{{ item_name }}</option>
+                      {% else %}
+                         <option value="{{ item_id }}">{{ item_name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
                 {{ form.item.errors }}
 
                 <label for="{{ form.source.id_for_label }}">{{ form.source.label }}:</label>
-                {{ form.source }}
+                <select name="{{form.source.name}}" id="{{ form.source.id_for_label }}">
+                    {% for source_id, source_name in sources.items %}
+                      {% if request.session.orig.source == source_id %}
+                         <option value="{{ source_id }}" selected>{{ source_name }}</option>
+                      {% else %}
+                         <option value="{{ source_id }}">{{ source_name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
                 {{ form.source.errors }}
 
                 <label for="{{ form.quantity_per_unit.id_for_label }}">{{ form.quantity_per_unit.label }}:</label>
@@ -35,7 +71,15 @@ BiswasAgro - Earning Entry
                 {{ form.quantity.errors }}
 
                 <label for="{{ form.unit.id_for_label }}">{{ form.unit.label }}:</label>
-                {{ form.unit }}
+                <select name="{{form.unit.name}}" id="{{ form.unit.id_for_label }}">
+                    {% for unit_id, unit_name in units.items %}
+                      {% if request.session.orig.unit == unit_id %}
+                         <option value="{{ unit_id }}" selected>{{ unit_name }}</option>
+                      {% else %}
+                         <option value="{{ unit_id }}">{{ unit_name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
                 {{ form.unit.errors }}
 
                 <label for="{{ form.price.id_for_label }}">{{ form.price.label }}:</label>

@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-BiswasAgro - Cost Items Entry
+BiswasAgro - Product Entry
 {% endblock %}
 
 {% block main-content %}
@@ -10,6 +10,18 @@ BiswasAgro - Cost Items Entry
         <h2>{{heading}}</h2>
             <form action="{% url 'costs:addup_costitems' row_id=row_id %}" method="post">
                 {% csrf_token %}
+                <label for="{{ form.sector.id_for_label }}">{{ form.sector.label}}</label>
+                <select name="{{ form.sector.name}}" id="{{ form.sector.id_for_label }}">
+                    {%  for secid, sec in secid_to_sec.items %}
+                      {% if request.session.orig.sector == secid %}
+                         <option value="{{secid}}" selected>{{ sec }}</option>
+                      {% else %}
+                         <option value="{{secid}}">{{ sec }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.sector.errors }}
+
                 <label for="{{ form.costitems.id_for_label }}">{{ form.costitems.label }}:</label>
                 {{ form.costitems }}
                 {{ form.costitems.errors }}

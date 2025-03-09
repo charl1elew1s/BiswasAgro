@@ -11,7 +11,15 @@ BiswasAgro - Items Entry
             <form action="{% url 'inv:addup_items' row_id=row_id %}" method="post">
                 {% csrf_token %}
                 <label for="{{ form.sector.id_for_label }}">{{ form.sector.label }}:</label>
-                {{ form.sector }}
+                <select name="{{form.sector.name}}" id="{{ form.sector.id_for_label }}">
+                    {% for sec in sectors %}
+                      {% if request.session.orig.sector == sec %}
+                         <option value="{{ sec }}" selected>{{ sec }}</option>
+                      {% else %}
+                         <option value="{{ sec }}">{{ sec }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
                 {{ form.sector.errors }}
 
                 <label for="{{ form.item_name.id_for_label }}">{{ form.item_name.label }}:</label>

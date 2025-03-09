@@ -6,17 +6,18 @@ Cost Table
 
 {% block main-content %}
         <div class="table-wrapper">
-            <h2>Cost Table</h2>
+            <h2>Casual Expenses</h2>
             <div class="table-container">
                 <table>
                         <tr>
                             <th>Date</th>
-                            <th>Category</th>
-                            <th>Items</th>
-                            <th>Amount</th>
+                            <th>Exp. Account</th>
+                            <th>Prod. Name</th>
+                            <th>Qty</th>
                             <th>Unit</th>
                             <th>Cost</th>
                             <th>Buyer</th>
+                            <th>Status</th>
                             <th>Voucher</th>
                             <th>Comment</th>
                             {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
@@ -33,6 +34,7 @@ Cost Table
                             <td>{{a_page.unit}}</td>
                             <td>{{a_page.cost}}</td>
                             <td>{{a_page.buyer}}</td>
+                            <td>{{a_page.status}}</td>
                             <td>{{a_page.buyvoucher}}</td>
                             <td>{{a_page.comment}}</td>
                             {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}

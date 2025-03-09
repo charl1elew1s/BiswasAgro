@@ -1,12 +1,12 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-Fishbuy Table
+Fish Purchase Table
 {% endblock %}
 
 {% block main-content %}
         <div class="table-wrapper">
-            <h2>Fishbuy Table</h2>
+            <h2>Fish Purchase Table</h2>
             <div class="table-container">
                 <table>
                         <tr>
@@ -14,9 +14,10 @@ Fishbuy Table
                             <th>Fish Name</th>
                             <th>Buy From</th>
                             <th>Buy Amount</th>
-                            <th>Fish Quantity</th>
+                            <th>Fish Qty</th>
                             <th>Price</th>
                             <th>Fish To</th>
+                            <th>Status</th>
                             <th>Voucher</th>
                             <th>Comments</th>
                             {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
@@ -33,7 +34,8 @@ Fishbuy Table
                             <td>{{a_page.fishquantity}}</td>
                             <td>{{a_page.price}}</td>
                             <td>{{a_page.fishto}}</td>
-                            <td>{{a_page.fouchar}}</td>
+                            <td>{{a_page.status}}</td>
+                            <td>{{a_page.vouchar}}</td>
                             <td>{{a_page.comments}}</td>
                             {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <td>

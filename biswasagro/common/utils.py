@@ -1,4 +1,5 @@
 """Shared utilities"""
+from django.core.exceptions import FieldDoesNotExist
 from django.http import JsonResponse
 from datetime import date, datetime
 from django.core.paginator import Paginator
@@ -6,29 +7,49 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Model
 from django.forms import ModelForm
 from django.urls import reverse
-from bisauth.models import TblRoles
+from bisauth.models import Roles
+from decimal import Decimal
 from datetime import datetime, timezone
-
+from inventory.models import Sectors
 
 DATE_FMT = '%Y-%m-%d'
 LOGS_FMT = '%Y-%m-%d %H:%M:%S'
 
 TBL_2_NAME = {
-    'cost': 'Cost',
-    'costitems': 'Cost Items',
+    'cost': 'Casual Expenses',
+    'costitems': 'Products',
     'costpurpose': 'Cost Purpose',
+    'dailyworks': 'Daily Works',
     'earning': 'Earning',
     'fishbuy': 'Fish Buy',
     'fishtype': 'Fish Type',
+    'fooddistribution': 'Food Distribution',
     'investment': 'Investment',
     'items': 'Items',
     'land': 'Land',
+    'loandetails': 'Loan Details',
+    'loan_providers_info': 'Loan Providers',
+    'mousa': 'Mousa',
+    'mousaname': 'Mousa Names',
+    'salary': 'Salary',
     'sectors': 'Sectors',
-    'tblproduct': 'Product',
+    'staff': 'Staff',
+    'staffs': 'Staffs',
     'units': 'Units',
-    'tblroles': 'Roles',
-    'tblusers': 'Users',
+    'roles': 'Roles',
+    'usersinfo': 'Users',
+    'term': 'Term'
 }
+
+# these are the primary keys for a given table (the default primary key field name is 'id' so we only put tables
+# in this dictionary that DO NOT have 'id' as it's primary key)
+TABLE_PK_FIELDS = {
+    'loandetails': 'loanid',
+    'loan_providers_info': 'investerid',
+    'staff': 'staffNo',
+}
+
+STATUS_LIST = [(1, 'Paid'), (2, 'Due')]
 
 
 def add_fields_to_session(request, model_obj):
@@ -40,7 +61,9 @@ def add_fields_to_session(request, model_obj):
     for field in model_obj._meta.fields:
         field_value = getattr(model_obj, field.name)
         if isinstance(field_value, date) or isinstance(field_value, datetime):
-            field_value = field_value.strftime(LOGS_FMT)
+            field_value = field_value.strftime(DATE_FMT)
+        if isinstance(field_value, Decimal):
+            field_value = str(field_value)  # convert Decimals to strings for serialization
         orig[field.name] = field_value
     request.session['orig'] = orig
 
@@ -53,6 +76,7 @@ def find_update_diffs(request, model_obj, skip_cases=set()):
            'new_value' : {str} [Note: this could be an empty string]
     """
     field_data = []
+
     # if orig is in the session make sure the model_name is the same as "our" model_name if it isn't, it's
     # a leftover remnant that needs to be removed
     if 'orig' in request.session:
@@ -70,7 +94,12 @@ def find_update_diffs(request, model_obj, skip_cases=set()):
             model_obj_value = getattr(model_obj, field.name)
             if isinstance(model_obj_value, date) or isinstance(model_obj_value, datetime):
                 model_obj_value = model_obj_value.strftime(DATE_FMT)
-            orig_field_value = orig_dict[column_name]
+            if isinstance(model_obj_value, Decimal):
+                # for this model_obj value we converted the value into a string before we serialized it in
+                # the session so now we need to convert the string back into a Decimal
+                orig_field_value = Decimal(orig_dict[column_name])
+            else:
+                orig_field_value = orig_dict[column_name]
             if model_obj_value == orig_field_value:
                 # no change for this field
                 orig_value = model_obj_value
@@ -84,13 +113,15 @@ def find_update_diffs(request, model_obj, skip_cases=set()):
                         'new_value': new_value}
             field_data.append(col_dict)
     else:
-        # this is the case where we don't have any diffs so the field_data is just for the model_obj
-        # we hit this case for a new entry in the table
+        # This is the case where we don't have any diffs so the field_data is just for the model_obj.
+        # We hit this case for a new entry in the table
         for field in model_obj._meta.fields:
             if field.name in skip_cases:
                 continue
             column_name = field.name
             model_obj_value = getattr(model_obj, field.name)
+            if isinstance(model_obj_value, date) or isinstance(model_obj_value, datetime):
+                model_obj_value = model_obj_value.strftime(DATE_FMT)
             col_dict = {'col_name': column_name,
                         'orig_value': model_obj_value,
                         'new_value': ''}
@@ -100,13 +131,21 @@ def find_update_diffs(request, model_obj, skip_cases=set()):
     if 'orig' in request.session:
         del request.session['orig']
 
-    # return the set of original values for cases where changes were made
+    # return the list of col_dict objects for each field of the model_obj
+    # CL: ++
+    # print("\nfield_data values:\n")
+    # for field_dict in field_data:
+    #     print(f"  field_dict: {field_dict}")
+    # print("\n")
+    # CL: --
     return field_data
 
 
 def delete_tabel_row(table_model_obj, row_id):
     try:
-        model_obj = table_model_obj.objects.get(id=row_id)
+        pk_name = table_model_obj._meta.pk.name
+        kwargs = {pk_name: row_id}
+        model_obj = table_model_obj.objects.get(**kwargs)
         model_obj.delete()
         return JsonResponse({"success": True})
     except Exception as e:
@@ -115,7 +154,7 @@ def delete_tabel_row(table_model_obj, row_id):
         return JsonResponse(response_json)
 
 
-def show_table(request, app_name: str, table_name: str, table_model_obj: Model):
+def show_table(request, app_name: str, table_name: str, table_model_obj: Model, page_mapper=None):
     context = dict()
     context['addModal'] = True  # for edit/delete
 
@@ -123,16 +162,23 @@ def show_table(request, app_name: str, table_name: str, table_model_obj: Model):
     context['add_url'] = f'{app_name}:addup_{table_name}'
 
     # display the contents of the table (we'll always use a Paginator just in case the table is large)
-    # we'll order by date in reverse order by id the newest first
-    paginator = Paginator(table_model_obj.objects.all().order_by('-id'), 15)
+    # we'll present in reverse order by the primary key, this will give the newest first
+    # we get the name of the primary key from the table_model class (table_model_obj). We need to do this because
+    # not all tables have a primary key of 'id'
+    pk_fieldname = table_model_obj._meta.pk.name
+    sorted_pk_fieldname = f'-{pk_fieldname}'
+    paginator = Paginator(table_model_obj.objects.all().order_by(sorted_pk_fieldname), 15)
     page_num = request.GET.get('page')
     page_objs = paginator.get_page(page_num)
 
-    # put the page_objs into the context for rendering
+    # put the page_objs into the context for rendering, but if any of the columns need look-ups use the passed
+    # in <table specific> page_mapper function to do the looks for us
+    if page_mapper:
+        page_mapper(request, page_objs)
     context['page_objs'] = page_objs
 
     template_name = f"{table_name}_landing.html"
-    if table_name == 'tblusers' or request.session['user']['role'] == 'User':
+    if table_name == 'usersinfo' or request.session['user']['role'] == 'User':
         # prevent the "Add" button on the user page
         context['skipAddButton'] = True
 
@@ -140,14 +186,19 @@ def show_table(request, app_name: str, table_name: str, table_model_obj: Model):
 
 
 def add_update_table(request, app_name: str, table_name: str,
-                     table_model_obj: Model, table_form_obj: ModelForm, row_id: int, skip_cases: set):
-    new_entry = True
-    context = dict()
+                     table_model_obj: Model, table_form_obj: ModelForm,
+                     row_id: int, skip_cases: set, context: dict, col_mapper=None):
 
+    # remove the skip_cases plus 'id' (we never want to include the 'id')
+    skip_cases.add('id')
+    new_entry = True
     if request.method == 'GET':
         if row_id == 0:
             # this indicates that we want to add a new record (no id == 0)
             form = table_form_obj()
+            # we want to get rid of any "orig" data in the session since we know we want a new entry here
+            if 'orig' in request.session:
+                del request.session['orig']
         else:
             # we need to go get the instance of this form (with prepopulated values)
             new_entry = False
@@ -157,6 +208,10 @@ def add_update_table(request, app_name: str, table_name: str,
             # save the original fields and their values in the session so that we can report
             # on which were changed during the edit process (when this method is called via a POST request)
             add_fields_to_session(request, model_obj)
+            # CL: ++
+            #  : let's see the values in the session 'orig'
+            # print(f"request.session['orig']: {request.session['orig']}")
+            # CL: --
 
     elif request.method == 'POST':
         # if row_id is 0, it's a new record, so we just create a new form
@@ -174,38 +229,60 @@ def add_update_table(request, app_name: str, table_name: str,
             model_instance = form.save(commit=False)
 
             # pass find_update_diffs the cases that we don't want to include in the resultant list
-            # field_data = find_update_diffs(request, model_instance, skip_cases)
-            field_data = find_update_diffs(request, model_instance)
+            field_data = find_update_diffs(request, model_instance, skip_cases)
             if row_id > 0:
                 context['new_entry'] = False
             else:
                 context['new_entry'] = True
 
             # update the logs field
-            # we need the username which is in the session
-            logged_in_username = request.session['user']['username']
+            # first see if there is a logs field and if so what it's max length is (they are all different)
+            try:
+                log_field = table_model_obj._meta.get_field('logs')
+                if log_field:
+                    max_length = -1
+                    if hasattr(log_field, 'max_length'):
+                        max_length = log_field.max_length
 
-            update_time = datetime.now(tz=timezone.utc).strftime(LOGS_FMT)
-            model_instance.logs = f"{logged_in_username} {update_time}"
-            model_instance.updated_at = update_time
+                    # we need the username which is in the session
+                    logged_in_username = request.session['user']['username']
+                    update_time = datetime.now(tz=timezone.utc).strftime(LOGS_FMT)
+                    full_log_field = f"{logged_in_username} {update_time}"
+                    truncated_log = full_log_field[:max_length]
+                    model_instance.logs = truncated_log
+            except FieldDoesNotExist as fde:
+                # nothing to do here we were just checking if the field was there
+                pass
 
-            # get the created at time from the value stored in the session
-            orig_created_at = get_field_data(field_data, 'created_at')
-            if orig_created_at:
-                model_instance.created_at = orig_created_at
-
-            password_hash = get_field_data(field_data, 'password')
-            model_instance.password = password_hash
+            # hash the password field if it exists on the Model Object
+            try:
+                password_field = table_model_obj._meta.get_field('password')
+                if password_field:
+                    password_hash = get_field_data(field_data, 'password')
+                    model_instance.password = password_hash
+            except FieldDoesNotExist as fde:
+                # nothing to do here
+                pass
 
             model_instance.save()
 
-            # remove the skip_cases plus 'id'
-            skip_cases.add('id')
             post_skip_data = []
+            form_labels = form.Meta.labels
             for field_dict in field_data:
-                if field_dict['col_name'] in skip_cases:
-                    continue
+                # remap the column name with values that came from the labels dict in the form
+                # (to make them more human readable)
+                field_dict['col_name'] = form_labels[field_dict['col_name']]
                 post_skip_data.append(field_dict)
+
+            # CL: ++
+            # print("\npost_skip_data:\n")
+            # for field_dict in post_skip_data:
+            #     print(f"  field_dict: {field_dict}")
+            # CL: --
+
+            if col_mapper:
+                col_mapper(request, post_skip_data)
+
             context['field_data'] = post_skip_data
 
             field_values = form.cleaned_data
@@ -219,12 +296,15 @@ def add_update_table(request, app_name: str, table_name: str,
             relative_url = reverse(url_str)
             full_url = request.build_absolute_uri(relative_url)
             context['next_url'] = full_url
+
             return render(request, 'add_update_confirmation.html', context)
 
         else:
             print('form is NOT valid!')
             add_update_template_name = f"add_update_{table_name}.html"
-            return render(request, add_update_template_name, {'form': form})
+            context['form'] = form
+            context['row_id'] = row_id
+            return render(request, add_update_template_name, context)
 
     context['form'] = form
     context['row_id'] = row_id
@@ -235,19 +315,16 @@ def add_update_table(request, app_name: str, table_name: str,
         context['heading'] = f'Update {table_heading} Entry'
 
     add_update_template_name = f"add_update_{table_name}.html"
-
     return render(request, add_update_template_name, context)
 
 
 def get_user_roles():
-    """Returns a dictionary with a mapping of role_id to role_name of all the values in the tbl_role table"""
-    # dict -> k:{int} - roleID from database
-    #         v:{str} - role name (e.g. Admin, Manager, etc)
-    roleid_2_name = dict()
-    qs = TblRoles.objects.all()
+    """Returns a list of all the values in the role table"""
+    role_names = []
+    qs = Roles.objects.all()
     for role_obj in qs:
-        roleid_2_name[role_obj.id] = role_obj.role
-    return roleid_2_name
+        role_names.append(role_obj.role)
+    return role_names
 
 
 def get_field_data(field_data, key):
@@ -257,3 +334,5 @@ def get_field_data(field_data, key):
                 return col_dict.get('orig_value')
     else:
         return None
+
+

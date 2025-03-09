@@ -1,19 +1,36 @@
         <div class="sidebar">
             <a href="{% url 'home' %}" class="sidebar-button">Home</a>
-            <a href="{% url 'costs:show_cost_table' %}" class="sidebar-button">Cost Table</a>
-            <a href="{% url 'costs:show_costitems_table' %}" class="sidebar-button">Cost Items Table</a>
+            <a href="{% url 'costs:show_cost_table' %}" class="sidebar-button">Casual Expenses</a>
+            <a href="{% url 'costs:show_costitems_table' %}" class="sidebar-button">Products</a>
             <a href="{% url 'costs:show_costpurpose_table' %}" class="sidebar-button">Cost Purpose Table</a>
-            <a href="{% url 'costs:show_earning_table' %}" class="sidebar-button">Earning</a>
-            <a href="{% url 'costs:show_investment_table' %}" class="sidebar-button">Investment</a>
-            <a href="{% url 'inv:show_fishbuy_table' %}" class="sidebar-button">Fishbuy</a>
+            <a href="{% url 'inv:show_dailyworks_table' %}" class="sidebar-button">Daily Works</a>
+            <a href="{% url 'costs:show_earning_table' %}" class="sidebar-button">Earnings</a>
+            <a href="{% url 'inv:show_fishbuy_table' %}" class="sidebar-button">Fish Purchase</a>
             <a href="{% url 'inv:show_fishtype_table' %}" class="sidebar-button">Fishtype</a>
+            <a href="{% url 'inv:show_fooddistribution_table' %}" class="sidebar-button">Food Distribution</a>
+            <a href="{% url 'costs:show_investment_table' %}" class="sidebar-button">Investment</a>
             <a href="{% url 'inv:show_items_table' %}" class="sidebar-button">Items</a>
             <a href="{% url 'inv:show_land_table' %}" class="sidebar-button">Land</a>
+            <a href="{% url 'costs:show_loandetails_table' %}" class="sidebar-button">Loan Details</a>
+<!--            CL: start-->
+            <a href="{% url 'home' %}" class="sidebar-button">Loan Providers Info</a>
+            <a href="{% url 'home' %}" class="sidebar-button">Loan Transactions</a>
+            <a href="{% url 'home' %}" class="sidebar-button">Mousa</a>
+            <a href="{% url 'home' %}" class="sidebar-button">Mousa Name</a>
+            <a href="{% url 'home' %}" class="sidebar-button">Salary</a>
+<!--            CL: end-->
             <a href="{% url 'inv:show_sectors_table' %}" class="sidebar-button">Sectors</a>
-            <a href="{% url 'inv:show_tblproduct_table' %}" class="sidebar-button">Product</a>
+<!--            CL: start-->
+            <a href="{% url 'home' %}" class="sidebar-button">Sources</a>
+            <a href="{% url 'home' %}" class="sidebar-button">Staff</a>
+            <a href="{% url 'home' %}" class="sidebar-button">Staffs</a>
+<!--            CL: end-->
             <a href="{% url 'inv:show_units_table' %}" class="sidebar-button">Units</a>
-            <a href="{% url 'bisauth:show_tblroles_table' %}" class="sidebar-button">Roles</a>
-            <a href="{% url 'bisauth:show_tblusers_table' %}" class="sidebar-button">Users</a>
+            <a href="{% url 'bisauth:show_usersinfo_table' %}" class="sidebar-button">Users</a>
+            <a href="{% url 'bisauth:show_roles_table' %}" class="sidebar-button">Roles</a>
+<!--            CL: start-->
+            <a href="{% url 'home' %}" class="sidebar-button">Term</a>
+<!--            CL: end-->
             <a href="/" class="sidebar-button">Reports</a>
             <a href="{% url 'bisauth:logout' %}" class="sidebar-button">Log Out</a>
         </div>

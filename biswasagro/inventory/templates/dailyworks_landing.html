@@ -1,17 +1,22 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-Cost Table
+Daily Works Table
 {% endblock %}
 
 {% block main-content %}
         <div class="table-wrapper">
-            <h2>Roles Table</h2>
+            <h2>Daily Works</h2>
             <div class="table-container">
                 <table>
                         <tr>
-                            <th>ID</th>
-                            <th>Role</th>
+                            <th>Date</th>
+                            <th>Work Type</th>
+                            <th>Item</th>
+                            <th>Amount</th>
+                            <th>Unit</th>
+                            <th>Personnel</th>
+                            <th>Additional Comments</th>
                             {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <th>Actions</th>
                             {% endif %}
@@ -19,14 +24,19 @@ Cost Table
                     <tbody>
                     {% for a_page in page_objs %}
                         <tr>
-                            <td>{{a_page.id}}</td>
-                            <td>{{a_page.role}}</td>
+                            <td>{{ a_page.date }}</td>
+                            <td>{{ a_page.worktype }}</td>
+                            <td>{{ a_page.item }}</td>
+                            <td>{{ a_page.amount }}</td>
+                            <td>{{ a_page.unit }}</td>
+                            <td>{{ a_page.personel }}</td>
+                            <td>{{ a_page.comment }}</td>
                             {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <td>
-                                <a href="{% url 'bisauth:addup_tblroles' row_id=a_page.id %}" class="action-link">Edit</a>
+                                <a href="{% url 'inv:addup_dailyworks' row_id=a_page.id %}" class="action-link">Edit</a>
                                 {% endif %}
                                 {% if request.session.user.role == 'Admin' %}
-                                | <a href="#" class="action-link delete-table-entry" table-id="bisauth/tblroles" data-id="{{a_page.id}}">Delete</a>
+                                | <a href="#" class="action-link delete-table-entry" table-id="inv/dailyworks" data-id="{{a_page.id}}">Delete</a>
                             </td>
                             {% endif %}
                         </tr>

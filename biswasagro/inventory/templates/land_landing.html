@@ -10,12 +10,13 @@ Land Table
             <div class="table-container">
                 <table>
                         <tr>
+                            <th>Gher</th>
                             <th>Mousa</th>
                             <th>Dag</th>
                             <th>Khotian</th>
                             <th>Amount</th>
-                            <th>Plane_land</th>
-                            <th>Par_cannel</th>
+                            <th>Plane Land</th>
+                            <th>Par Cannel</th>
                             <th>Owners</th>
                             <th>Comment</th>
                             {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
@@ -25,6 +26,7 @@ Land Table
                     <tbody>
                     {% for a_page in page_objs %}
                         <tr>
+                            <td>{{ a_page.gher }}</td>
                             <td>{{ a_page.mousa }}</td>
                             <td>{{ a_page.dag }}</td>
                             <td>{{ a_page.khotian }}</td>

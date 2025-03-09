@@ -8,7 +8,7 @@ BiswasAgro - Users Entry
 <div class="form-container">
     <div class="form-box">
         <h2>{{heading}}</h2>
-            <form action="{% url 'bisauth:addup_tblusers' row_id=row_id %}" method="post">
+            <form action="{% url 'bisauth:addup_usersinfo' row_id=row_id %}" method="post">
                 {% csrf_token %}
                 <label for="{{ form.name.id_for_label }}">{{ form.name.label }}:</label>
                 {{ form.name }}

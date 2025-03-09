@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Daily Works Entry
+{% endblock %}
+
+{% block main-content %}
+<div class="form-container">
+    <div class="form-box">
+        <h2>{{heading}}</h2>
+            <form action="{% url 'inv:addup_dailyworks' row_id=row_id %}" method="post">
+                {% csrf_token %}
+                <label for="{{ form.date.id_for_label }}">{{ form.date.label }}:</label>
+                {{ form.date }}
+                {{ form.date.errors }}
+
+                <label for="{{ form.worktype.id_for_label }}">{{ form.worktype.label }}:</label>
+                <select name="{{ form.worktype.name }}" id="{{ form.worktype.id_for_label }}">
+                    {% for work_type in work_types %}
+                      {% if request.session.orig.worktype == work_type %}
+                         <option value="{{ work_type }}" selected>{{ work_type }}</option>
+                      {% else %}
+                         <option value="{{ work_type }}">{{ work_type }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.worktype.errors }}
+
+                <label for="{{ form.item.id_for_label }}">{{ form.item.label }}:</label>
+                <select name="{{ form.item.name }}" id="{{ form.item.id_for_label }}">
+                    {% for item_name in item_names %}
+                      {% if request.session.orig.item == item_name %}
+                         <option value="{{ item_name }}" selected>{{ item_name }}</option>
+                      {% else %}
+                         <option value="{{ item_name }}">{{ item_name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.item.errors }}
+
+                <label for="{{ form.amount.id_for_label }}">{{ form.amount.label }}:</label>
+                {{ form.amount }}
+                {{ form.amount.errors }}
+
+                <label for="{{ form.unit.id_for_label }}">{{ form.unit.label }}:</label>
+                <select name="{{ form.unit.name }}" id="{{ form.unit.id_for_label }}">
+                    {% for unit in units %}
+                      {% if request.session.orig.unit == unit %}
+                         <option value="{{ unit }}" selected>{{ unit }}</option>
+                      {% else %}
+                         <option value="{{ unit }}">{{ unit }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.unit.errors }}
+
+                <label for="{{ form.personel.id_for_label }}">{{ form.personel.label }}:</label>
+                {{ form.personel }}
+                {{ form.personel.errors }}
+
+                <label for="{{ form.comment.id_for_label }}">{{ form.comment.label }}:</label>
+                {{ form.comment }}
+                {{ form.comment.errors }}
+
+            <div class="button-group">
+                <button type="button" onclick="history.back()" class="cancel-btn">Cancel</button>
+                <button type="submit" class="save-btn">Save</button>
+            </div>
+</form>
+</div>
+
+{% endblock %}

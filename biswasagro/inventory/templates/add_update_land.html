@@ -10,6 +10,10 @@ BiswasAgro - Land Entry
         <h2>{{heading}}</h2>
             <form action="{% url 'inv:addup_land' row_id=row_id %}" method="post">
                 {% csrf_token %}
+                <label for="{{ form.gher.id_for_label }}">{{ form.gher.label }}:</label>
+                {{ form.gher }}
+                {{ form.gher.errors }}
+
                 <label for="{{ form.mousa.id_for_label }}">{{ form.mousa.label }}:</label>
                 {{ form.mousa }}
                 {{ form.mousa.errors }}

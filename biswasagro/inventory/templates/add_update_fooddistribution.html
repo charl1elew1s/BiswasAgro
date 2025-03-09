@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Food Distribution Entry
+{% endblock %}
+
+{% block main-content %}
+<div class="form-container">
+    <div class="form-box">
+        <h2>{{heading}}</h2>
+            <form action="{% url 'inv:addup_fooddistribution' row_id=row_id %}" method="post">
+                {% csrf_token %}
+                <label for="{{ form.date.id_for_label }}">{{ form.date.label }}:</label>
+                {{ form.date }}
+                {{ form.date.errors }}
+
+                <label for="{{ form.gher.id_for_label }}">{{ form.gher.label }}:</label>
+                {{ form.gher }}
+                {{ form.gher.errors }}
+
+                <label for="{{ form.item.id_for_label }}">{{ form.item.label }}:</label>
+                {{ form.item }}
+                {{ form.item.errors }}
+
+                <label for="{{ form.amount.id_for_label }}">{{ form.amount.label }}:</label>
+                {{ form.amount }}
+                {{ form.amount.errors }}
+
+                <label for="{{ form.unit.id_for_label }}">{{ form.unit.label }}:</label>
+                {{ form.unit }}
+                {{ form.unit.errors }}
+
+            <div class="button-group">
+                <button type="button" onclick="history.back()" class="cancel-btn">Cancel</button>
+                <button type="submit" class="save-btn">Save</button>
+            </div>
+</form>
+</div>
+
+{% endblock %}

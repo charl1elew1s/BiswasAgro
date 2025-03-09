@@ -1,10 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-BiswasAgro - Cost Entry
+BiswasAgro - Expenses Entry
 {% endblock %}
 
 {% block main-content %}
+
 <div class="form-container">
     <div class="form-box">
         <h2>{{heading}}</h2>
@@ -15,20 +16,43 @@ BiswasAgro - Cost Entry
                 {{ form.date.errors }}
 
                 <label for="{{ form.costcategory.id_for_label}}">{{form.costcategory.label}}:</label>
-                {{ form.costcategory }}
+                <select name="{{form.costcategory.name}}" id="{{ form.costcategory.id_for_label}}">
+                    {% for exp_acct in expense_accounts %}
+                      {% if request.session.orig.costcategory == exp_acct %}
+                         <option value="{{ exp_acct }}" selected>{{ exp_acct }}</option>
+                      {% else %}
+                         <option value="{{ exp_acct }}">{{ exp_acct }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
                 {{ form.costcategory.errors }}
 
                 <label for="{{ form.costitems.id_for_label}}">{{form.costitems.label}}:</label>
-                {{form.costitems}}
-                {{form.costitems.errors}}
+                <select name="{{form.costitems.name}}" id="{{form.costitems.id_for_label}}">
+                    {% for prod_name in product_names %}
+                      {% if request.session.orig.costitems == prod_name %}
+                       <option value="{{ prod_name }}" selected>{{ prod_name }}</option>
+                      {% else %}
+                       <option value="{{ prod_name }}">{{ prod_name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.costitems.errors }}
 
                 <label for="{{ form.buyamount.id_for_label}}">{{form.buyamount.label}}:</label>
                 {{ form.buyamount }}
                 {{ form.buyamount.errors }}
 
                 <label for="{{ form.unit.id_for_label}}">{{form.unit.label}}:</label>
-                <!--<select id="unit"><option value="kg">kg</option><option value="litre">litre</option><option value="piece">piece</option><option value="person">person</option></select>-->
-                {{ form.unit }}
+                <select name="{{form.unit.name}}" id="{{ form.unit.id_for_label}}">
+                    {% for unit in units %}
+                      {% if request.session.orig.unit == unit %}
+                      <option value="{{ unit }}" selected>{{ unit }}</option>
+                    {% else %}
+                      <option value="{{ unit }}">{{ unit }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
                 {{ form.unit.errors }}
 
                 <label for="{{ form.cost.id_for_label}}">{{form.cost.label}}:</label>
@@ -38,6 +62,18 @@ BiswasAgro - Cost Entry
                 <label for="{{ form.buyer.id_for_label}}">{{form.buyer.label}}:</label>
                 {{ form.buyer }}
                 {{ form.buyer.errors }}
+
+                <label for="{{ form.status.id_for_label}}">{{form.status.label}}</label>
+                <select name="{{form.status.name}}" id="{{ form.status.id_for_label}}">
+                    {% for stat_id, stat_val in status.items %}
+                      {% if request.session.orig.status == stat_id %}
+                         <option value="{{stat_id}}" selected>{{stat_val}}</option>
+                      {% else %}
+                         <option value="{{stat_id}}">{{stat_val}}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.status.errors }}
 
                 <label for="{{ form.buyvoucher.id_for_label}}">{{form.buyvoucher.label}}:</label>
                 {{ form.buyvoucher }}
