@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Staff Entry
+{% endblock %}
+
+{% block main-content %}
+<div class="form-container">
+    <div class="form-box">
+        <h2>{{heading}}</h2>
+            <form action="{% url 'bisauth:addup_staff' row_id=row_id %}" method="post">
+                {% csrf_token %}
+                <label for="{{ form.name.id_for_label }}">{{ form.name.label }}:</label>
+                {{ form.name }}
+                {{ form.name.errors }}
+
+                <label for="{{ form.post.id_for_label }}">{{ form.post.label }}:</label>
+                {{ form.post }}
+                {{ form.post.errors }}
+
+                <label for="{{ form.salary.id_for_label }}">{{ form.salary.label }}:</label>
+                {{ form.salary }}
+                {{ form.salary.errors }}
+
+                <label for="{{ form.address.id_for_label }}">{{ form.address.label }}:</label>
+                {{ form.address }}
+                {{ form.address.errors }}
+
+                <label for="{{ form.mobile.id_for_label }}">{{ form.mobile.label }}:</label>
+                {{ form.mobile }}
+                {{ form.mobile.errors }}
+
+                <label for="{{ form.reference.id_for_label }}">{{ form.reference.label }}:</label>
+                {{ form.reference }}
+                {{ form.reference.errors }}
+
+            <div class="button-group">
+                <button type="button" onclick="history.back()" class="cancel-btn">Cancel</button>
+                <button type="submit" class="save-btn">Save</button>
+            </div>
+</form>
+</div>
+
+{% endblock %}

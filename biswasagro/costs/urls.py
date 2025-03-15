@@ -34,4 +34,18 @@ urlpatterns = [
     path('loandetails/delete/<int:row_id>', views.loandetails_delete_row, name='loandetails_delete_row'),
     path('addup_loandetails/<int:row_id>', views.add_update_loandetails, name="addup_loandetails"),
 
+    # handle the `loan_providers_info` table
+    path('loan_providers_info', views.show_loan_providers_info_table, name='show_loan_providers_info_table'),
+    path('loan_providers_info/delete/<int:row_id>', views.loan_providers_info_delete_row,
+         name='loan_providers_info_delete_row'),
+    path('addup_loan_providers_info/<int:row_id>', views.add_update_loan_providers_info,
+         name="addup_loan_providers_info"),
+
+    # handle the `loan_transactions` table
+    path('loan_transactions', views.show_loan_transactions_table, name='show_loan_transactions_table'),
+    path('loan_transactions/delete/<int:row_id>', views.loan_transactions_delete_row,
+         name='loan_transactions_delete_row'),
+    path('addup_loan_transactions/<int:row_id>', views.add_update_loan_transactions,
+         name="addup_loan_transactions"),
+
 ]

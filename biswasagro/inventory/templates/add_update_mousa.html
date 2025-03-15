@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Mousa Entry
+{% endblock %}
+
+{% block main-content %}
+
+<div class="form-container">
+    <div class="form-box">
+        <h2>{{heading}}</h2>
+            <form action="{% url 'inv:addup_mousa' row_id=row_id %}" method="post">
+                {% csrf_token %}
+                <label for="{{ form.date.id_for_label }}">{{ form.date.label }}:</label>
+                {{ form.date }}
+                {{ form.date.errors }}
+
+                <label for="{{ form.mousa.id_for_label}}">{{form.mousa.label}}:</label>
+                <select name="{{form.mousa.name}}" id="{{ form.mousa.id_for_label}}">
+                    {% for mname in mousa_names %}
+                      {% if request.session.orig.mousa == mname %}
+                         <option value="{{ mname }}" selected>{{ mname }}</option>
+                      {% else %}
+                         <option value="{{ mname }}">{{ mname }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.mname.errors }}
+
+                <label for="{{ form.dag.id_for_label }}">{{form.dag.label}}:</label>
+                <select name="{{form.dag.name}}" id="{{ form.dag.id_for_label }}">
+                    {% for dag_v in dag_vals %}
+                      {% if request.session.orig.dag == dag_v %}
+                       <option value="{{ dag_v }}" selected>{{ dag_v }}</option>
+                      {% else %}
+                       <option value="{{ dag_v }}">{{ dag_v }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.dag.errors }}
+
+                <label for="{{ form.owner.id_for_label}}">{{form.owner.label}}:</label>
+                {{ form.owner }}
+                {{ form.owner.errors }}
+
+                <label for="{{ form.amount.id_for_label}}">{{form.amount.label}}:</label>
+                {{ form.amount }}
+                {{ form.amount.errors }}
+
+                <label for="{{ form.status.id_for_label}}">{{form.status.label}}:</label>
+                <select name="{{form.status.name}}" id="{{ form.status.id_for_label }}">
+                    {% for stat_id, stat_val in status_dict.items %}
+                      {% if request.session.orig.status == stat_id %}
+                      <option value="{{ stat_id }}" selected>{{ stat_val }}</option>
+                    {% else %}
+                      <option value="{{ stat_id }}">{{ stat_val }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.status.errors }}
+
+                <label for="{{ form.term.id_for_label}}">{{form.term.label}}:</label>
+                <select name="{{form.term.name}}" id="{{ form.term.id_for_label }}">
+                    {% for term_val in terms %}
+                      {% if request.session.orig.term == term_val %}
+                      <option value="{{ term_val }}" selected>{{ term_val }}</option>
+                    {% else %}
+                      <option value="{{ term_val }}">{{ term_val }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.term.errors }}
+
+                <label for="{{ form.vc_numnber.id_for_label}}">{{form.vc_numnber.label}}:</label>
+                {{ form.vc_numnber }}
+                {{ form.vc_numnber.errors }}
+
+            <div class="button-group">
+                <button type="button" onclick="history.back()" class="cancel-btn">Cancel</button>
+                <button type="submit" class="save-btn">Save</button>
+            </div>
+</form>
+</div>
+
+{% endblock %}

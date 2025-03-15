@@ -1,12 +1,7 @@
 from django.shortcuts import redirect
-from .models import (Fishbuy, Fishtype, Items, Land, Sectors, Units, Dailyworks, Fooddistribution)
-from .forms import (FishbuyForm, FishtypeForm, ItemsForm, LandForm, SectorsForm, UnitsForm, DailyworksForm,
-                    FoodDistributionForm)
-from common.utils import (delete_tabel_row, show_table, add_update_table)
-# from common.column_mappers import (SECTOR_MAPPING, ITEMS_MAPPING, UNIT_MAPPING, FISHTYPE_MAPPING,
-#                                    SOURCE_MAPPING, STATUS_MAPPING)
-# from common.column_mappers import (get_mapping, show_dailyworks_mapper, show_fishbuy_mapper, addup_fishbuy_mapper,
-#                                    show_fooddistribution_mapper)
+from .models import *
+from .forms import *
+from common.utils import *
 from common.column_mappers import *
 
 
@@ -46,7 +41,7 @@ def fishbuy_delete_row(request, row_id):
     if not is_in:
         return redirect('bisauth:login')
 
-    return delete_tabel_row(Fishbuy, row_id)
+    return delete_tabel_row(request, Fishbuy, row_id)
 
 
 #
@@ -75,7 +70,7 @@ def fishtype_delete_row(request, row_id):
     if not is_in:
         return redirect('bisauth:login')
 
-    return delete_tabel_row(Fishtype, row_id)
+    return delete_tabel_row(request, Fishtype, row_id)
 
 
 #
@@ -105,7 +100,7 @@ def fooddistribution_delete_row(request, row_id):
     if not is_in:
         return redirect('bisauth:login')
 
-    return delete_tabel_row(Fooddistribution, row_id)
+    return delete_tabel_row(request, Fooddistribution, row_id)
 
 
 #
@@ -137,7 +132,7 @@ def items_delete_row(request, row_id):
     if not is_in:
         return redirect('bisauth:login')
 
-    return delete_tabel_row(Items, row_id)
+    return delete_tabel_row(request, Items, row_id)
 
 
 #
@@ -166,7 +161,78 @@ def land_delete_row(request, row_id):
     if not is_in:
         return redirect('bisauth:login')
 
-    return delete_tabel_row(Land, row_id)
+    return delete_tabel_row(request, Land, row_id)
+
+
+#
+# Mousa table
+#
+def show_mousa_table(request):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return show_table(request, 'inv', 'mousa', Mousa, show_mousa_mapper)
+
+
+def add_update_mousa(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    context = dict()
+
+    # get the set of mousa names
+    context['mousa_names'] = set(get_mapping(request, MOUSANAME_MAPPING).values())
+
+    # get the set of dag values (remove empty strings)
+    context['dag_vals'] = [v.strip() for v in set(get_mapping(request, DAG_MAPPING).values()) if v.strip() != '']
+
+    # get the terms
+    context['terms'] = set(get_mapping(request, TERM_MAPPING).values())
+
+    # get the status mappings
+    context['status_dict'] = get_mapping(request, STATUS_MAPPING)
+
+    return add_update_table(request, 'inv', 'mousa', Mousa, MousaForm,
+                            row_id, {'log'}, context, addup_mousa_mapper)
+
+
+def mousa_delete_row(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return delete_tabel_row(request, Mousa, row_id)
+
+
+#
+# Mousa Name table
+#
+def show_mousaname_table(request):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return show_table(request, 'inv', 'mousaname', Mousaname)
+
+
+def add_update_mousaname(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    context = dict()
+    return add_update_table(request, 'inv', 'mousaname', Mousaname, MousaNameForm,
+                            row_id, set(), context)
+
+
+def mousaname_delete_row(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return delete_tabel_row(request, Mousaname, row_id)
 
 
 #
@@ -195,7 +261,7 @@ def sectors_delete_row(request, row_id):
     if not is_in:
         return redirect('bisauth:login')
 
-    return delete_tabel_row(Sectors, row_id)
+    return delete_tabel_row(request, Sectors, row_id)
 
 
 #
@@ -224,7 +290,7 @@ def units_delete_row(request, row_id):
     if not is_in:
         return redirect('bisauth:login')
 
-    return delete_tabel_row(Units, row_id)
+    return delete_tabel_row(request, Units, row_id)
 
 
 #
@@ -236,7 +302,6 @@ def show_dailyworks_table(request):
         return redirect('bisauth:login')
 
     return show_table(request, 'inv', 'dailyworks', Dailyworks, show_dailyworks_mapper)
-    # return show_table(request, 'inv', 'dailyworks', Dailyworks)
 
 
 def add_update_dailyworks(request, row_id):
@@ -264,4 +329,92 @@ def dailyworks_delete_row(request, row_id):
     if not is_in:
         return redirect('bisauth:login')
 
-    return delete_tabel_row(Dailyworks, row_id)
+    return delete_tabel_row(request, Dailyworks, row_id)
+
+
+#
+# Sources table
+#
+def show_sources_table(request):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return show_table(request, 'inv', 'sources', Sources)
+
+
+def add_update_sources(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    context = dict()
+    return add_update_table(request, 'inv', 'sources', Sources, SourcesForm,
+                            row_id, {'logs'}, context)
+
+
+def sources_delete_row(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return delete_tabel_row(request, Sources, row_id)
+
+
+#
+# Units table
+#
+def show_units_table(request):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return show_table(request, 'inv', 'units', Units)
+
+
+def add_update_units(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    context = dict()
+    return add_update_table(request, 'inv', 'units', Units, UnitsForm,
+                            row_id, {'logs'}, context)
+
+
+def units_delete_row(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return delete_tabel_row(request, Units, row_id)
+
+
+#
+# Term table
+#
+def show_term_table(request):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return show_table(request, 'inv', 'term', Term)
+
+
+def add_update_term(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    context = dict()
+    skip_set = set()
+    return add_update_table(request, 'inv', 'term', Term, TermForm,
+                            row_id, skip_set, context)
+
+
+def term_delete_row(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return delete_tabel_row(request, Term, row_id)

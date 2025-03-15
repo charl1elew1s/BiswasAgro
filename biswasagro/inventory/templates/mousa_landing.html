@@ -1,16 +1,23 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-Units Table
+Mousa Table
 {% endblock %}
 
 {% block main-content %}
         <div class="table-wrapper">
-            <h2>Units Table</h2>
+            <h2>Mousa Table</h2>
             <div class="table-container">
                 <table>
                         <tr>
-                            <th>Unit</th>
+                            <th>Date</th>
+                            <th>Mousa</th>
+                            <th>Dag</th>
+                            <th>Owner</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Term</th>
+                            <th>VC Number</th>
                             {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <th>Actions</th>
                             {% endif %}
@@ -18,13 +25,20 @@ Units Table
                     <tbody>
                     {% for a_page in page_objs %}
                         <tr>
-                            <td>{{a_page.unit}}</td>
+                            <td>{{a_page.date}}</td>
+                            <td>{{a_page.mousa}}</td>
+                            <td>{{a_page.dag}}</td>
+                            <td>{{a_page.owner}}</td>
+                            <td>{{a_page.amount}}</td>
+                            <td>{{a_page.status}}</td>
+                            <td>{{a_page.term}}</td>
+                            <td>{{a_page.vc_numnber}}</td>
                             {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <td>
-                                <a href="{% url 'inv:addup_units' row_id=a_page.id %}" class="action-link">Edit</a>
-                                {% endif %}
-                                {% if request.session.user.role == 'Admin' %}
-                                | <a href="#" class="action-link delete-table-entry" table-id="inv/units" data-id="{{a_page.id}}">Delete</a>
+                                <a href="{% url 'inv:addup_mousa' row_id=a_page.id %}" class="action-link">Edit</a>
+                            {% endif %}
+                            {% if request.session.user.role == 'Admin' %}
+                                 | <a href="#" class="action-link delete-table-entry" table-id="inv/mousa" data-id="{{a_page.id}}">Delete</a>
                             </td>
                             {% endif %}
                         </tr>

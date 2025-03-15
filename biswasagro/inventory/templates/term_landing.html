@@ -1,21 +1,16 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-Users Table
+Term Table
 {% endblock %}
 
 {% block main-content %}
         <div class="table-wrapper">
-            <h2>Users Table</h2>
+            <h2>Term Table</h2>
             <div class="table-container">
                 <table>
                         <tr>
-                            <th>Name</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Mobile</th>
-                            <th>Role</th>
-                            <th>Is Active</th>
+                            <th>Term</th>
                             {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <th>Actions</th>
                             {% endif %}
@@ -23,18 +18,13 @@ Users Table
                     <tbody>
                     {% for a_page in page_objs %}
                         <tr>
-                            <td>{{ a_page.name }}</td>
-                            <td>{{ a_page.username }}</td>
-                            <td>{{ a_page.email }}</td>
-                            <td>{{ a_page.mobile }}</td>
-                            <td>{{ a_page.role }}</td>
-                            <td>{{ a_page.isactive }}</td>
+                            <td>{{a_page.term}}</td>
                             {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <td>
-                                <a href="{% url 'bisauth:addup_usersinfo' row_id=a_page.id %}" class="action-link">Edit</a>
+                                <a href="{% url 'inv:addup_term' row_id=a_page.id %}" class="action-link">Edit</a>
                                 {% endif %}
                                 {% if request.session.user.role == 'Admin' %}
-                                | <a href="#" class="action-link delete-table-entry" table-id="bisauth/usersinfo" data-id="{{a_page.id}}">Delete</a>
+                                | <a href="#" class="action-link delete-table-entry" table-id="inv/term" data-id="{{a_page.id}}">Delete</a>
                             </td>
                             {% endif %}
                         </tr>
@@ -44,5 +34,13 @@ Users Table
             </div>
 
 {% include 'pagination_control.html' %}
+
+<!--CL we can put a search selection here            -->
+<!--<label for="c_search">Choose search</label>-->
+<!--<select name="c_search" id="c_search">-->
+<!--    <option value="date">date</option>-->
+<!--    <option value="id">id</option>-->
+<!--</select>-->
+<!-- CL end search selection-->
 
 {% endblock %}

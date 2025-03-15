@@ -26,13 +26,29 @@ BiswasAgro - Users Entry
                 {{ form.mobile }}
                 {{ form.mobile.errors }}
 
-                <label for="{{ form.roleid.id_for_label }}">{{ form.roleid.label }}:</label>
-                {{ form.roleid }}
-                {{ form.roleid.errors }}
+                <label for="{{ form.role.id_for_label }}">{{ form.role.label }}:</label>
+                <select name="{{form.role.name}}" id="{{ form.role.id_for_label }}">
+                    {% for role_id, role_name in roles.items %}
+                      {% if request.session.orig.role == role_name %}
+                         <option value="{{ role_name }}" selected>{{ role_name }}</option>
+                      {% else %}
+                         <option value="{{ role_name }}">{{ role_name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.role.errors }}
 
-                <label for="{{ form.is_active.id_for_label }}">{{ form.is_active.label }}:</label>
-                {{ form.is_active }}
-                {{ form.is_active.errors }}
+                <label for="{{ form.isactive.id_for_label }}">{{ form.isactive.label }}:</label>
+                <select name="{{form.isactive.name}}" id="{{ form.isactive.id_for_label }}">
+                    {% for active_id, active_txt in is_active.items %}
+                      {% if request.session.orig.isactive == active_id %}
+                         <option value="{{ active_id }}" selected>{{ active_txt }}</option>
+                      {% else %}
+                         <option value="{{ active_id }}">{{ active_txt }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.isactive.errors }}
 
             <div class="button-group">
                 <button type="button" onclick="history.back()" class="cancel-btn">Cancel</button>

@@ -1,0 +1,77 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Salary Entry
+{% endblock %}
+
+{% block main-content %}
+
+<div class="form-container">
+    <div class="form-box">
+        <h2>{{heading}}</h2>
+            <form action="{% url 'bisauth:addup_salary' row_id=row_id %}" method="post">
+                {% csrf_token %}
+                <label for="{{ form.date.id_for_label }}">{{ form.date.label }}:</label>
+                {{ form.date }}
+                {{ form.date.errors }}
+
+                <label for="{{ form.purpose.id_for_label }}">{{form.purpose.label}}:</label>
+                <select name="{{form.purpose.name}}" id="{{ form.purpose.id_for_label }}">
+                    {% for purp in purposes %}
+                      {% if request.session.orig.purpose == purp %}
+                         <option value="{{ purp }}" selected>{{ purp }}</option>
+                      {% else %}
+                         <option value="{{ purp }}">{{ purp }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.purpose.errors }}
+
+                <label for="{{ form.reason.id_for_label}}">{{form.reason.label}}:</label>
+                {{ form.reason }}
+                {{ form.reason.errors }}
+
+                <label for="{{ form.quantity.id_for_label }}">{{form.quantity.label}}:</label>
+                {{ form.quantity }}
+                {{ form.quantity.errors }}
+
+                <label for="{{ form.rate.id_for_label }}">{{form.rate.label}}:</label>
+                {{ form.rate }}
+                {{ form.rate.errors }}
+
+                <label for="{{ form.total.id_for_label }}">{{form.total.label}}:</label>
+                {{ form.total }}
+                {{ form.total.errors }}
+
+                <label for="{{ form.personel.id_for_label }}">{{form.personel.label}}:</label>
+                {{ form.personel }}
+                {{ form.personel.errors }}
+
+                <label for="{{ form.voucher.id_for_label }}">{{form.voucher.label}}:</label>
+                {{ form.voucher }}
+                {{ form.voucher.errors }}
+
+                <label for="{{ form.status.id_for_label}}">{{form.status.label}}</label>
+                <select name="{{form.status.name}}" id="{{ form.status.id_for_label}}">
+                    {% for stat_id, stat_val in status.items %}
+                      {% if request.session.orig.status == stat_id %}
+                         <option value="{{stat_id}}" selected>{{stat_val}}</option>
+                      {% else %}
+                         <option value="{{stat_id}}">{{stat_val}}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
+                {{ form.status.errors }}
+
+                <label for="{{ form.comment.id_for_label }}">{{form.comment.label}}:</label>
+                {{ form.comment }}
+                {{ form.comment.errors }}
+
+            <div class="button-group">
+                <button type="button" onclick="history.back()" class="cancel-btn">Cancel</button>
+                <button type="submit" class="save-btn">Save</button>
+            </div>
+</form>
+</div>
+
+{% endblock %}

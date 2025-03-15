@@ -3,10 +3,14 @@ These are functions used to map table columns to values taken from other table/c
 """
 from datetime import date
 from costs.models import Costitems
-from inventory.models import Sectors, Items, Sources, Units, Fishtype
-from common.utils import DATE_FMT
+from inventory.models import Sectors, Items, Sources, Units, Fishtype, Mousaname, Land, Term
+from bisauth.models import Roles
 
-STATUS_MAP = {1: 'Paid', 2: 'Due'}
+DATE_FMT = '%Y-%m-%d'
+
+STATUS_MAP = {1: 'Paid', 2: 'Due', None: ''}
+SALARY_PURPOSE = {'Staff', 'Labour'}
+IS_ACTIVE = {0: 'Inactive', 1: 'Active'}
 
 STATUS_MAPPING = 'status_mapping'
 SECTOR_MAPPING = 'sector_mapping'
@@ -15,6 +19,25 @@ ITEMS_MAPPING = 'items_mapping'
 SOURCE_MAPPING = 'source_mapping'
 UNIT_MAPPING = 'unit_mapping'
 FISHTYPE_MAPPING = 'fishtype_mapping'
+MOUSANAME_MAPPING = 'mousaname_mapping'
+DAG_MAPPING = 'dag_mapping'
+TERM_MAPPING = 'term_mapping'
+ROLE_MAPPING = 'role_mapping'
+
+# Mapping between the database table name and the mapping key for the get_mapping() function. We use this to update
+# the cache when one of the underlying database tables is updated.
+TABLE_2_CACHE = {
+    'sectors': SECTOR_MAPPING,
+    'costitems': COSTITEM_MAPPING,
+    'items': ITEMS_MAPPING,
+    'sources': SOURCE_MAPPING,
+    'units': UNIT_MAPPING,
+    'fishtype': FISHTYPE_MAPPING,
+    'mousaname': MOUSANAME_MAPPING,
+    'land': DAG_MAPPING,
+    'term': TERM_MAPPING,
+    'roles': ROLE_MAPPING,
+}
 
 
 def get_mapping(request, mapping_type):
@@ -48,23 +71,38 @@ def get_mapping(request, mapping_type):
         elif mapping_type == FISHTYPE_MAPPING:
             for ftype in Fishtype.objects.all():
                 the_mapping[ftype.id] = ftype.fishname.strip()
+        elif mapping_type == MOUSANAME_MAPPING:
+            for mname in Mousaname.objects.all():
+                the_mapping[mname.id] = mname.name.strip()
+        elif mapping_type == DAG_MAPPING:
+            for land_obj in Land.objects.all():
+                the_mapping[land_obj.id] = land_obj.dag.strip()
+        elif mapping_type == TERM_MAPPING:
+            for term_obj in Term.objects.all():
+                the_mapping[term_obj.id] = term_obj.term.strip()
+        elif mapping_type == ROLE_MAPPING:
+            for a_role in Roles.objects.all():
+                the_mapping[a_role.id] = a_role.role.strip()
 
         request.session[mapping_type] = the_mapping
 
     # in every one of these mappings we are storing a database id (an int) as the key and a string as the value,
     # because of this we know converting the keys to ints is OK.
-    return {int(k): v for k, v in the_mapping.items()}
+    safe_return_dict = dict()
+    for k, v in the_mapping.items():
+        # if the key is not a numeric type or a string that can be converted to one we skip it
+        if isinstance(k, int) or isinstance(k, float):
+            safe_return_dict[int(k)] = v
+        elif isinstance(k, str) and k.isnumeric():
+            safe_return_dict[int(k)] = v
+
+    return safe_return_dict
 
 
 def remove_all_mappings(request):
-    if request.session.get(SECTOR_MAPPING):
-        del request.session[SECTOR_MAPPING]
-    if request.session.get(ITEMS_MAPPING):
-        del request.session[ITEMS_MAPPING]
-    if request.session.get(SOURCE_MAPPING):
-        del request.session[SOURCE_MAPPING]
-    if request.session.get(UNIT_MAPPING):
-        del request.session[UNIT_MAPPING]
+    for map_key in TABLE_2_CACHE.values():
+        if request.session.get(map_key):
+            del request.session[map_key]
 
 
 def get_mapped_value(mapper, field_data):
@@ -74,13 +112,26 @@ def get_mapped_value(mapper, field_data):
         field_data['new_value'] = mapper[int(field_data['new_value'])]
 
 
+def update_cache(request, table_name):
+    """
+    If the passed in table_name is one that is backed by a cache mapping then remove the mapping from the
+    session and then go back to the database and update the mapping and put the updated mapping back in the session.
+    """
+    mapping_key = TABLE_2_CACHE.get(table_name)
+    if mapping_key:
+        if request.session.get(mapping_key):
+            # refresh the cache associated with this table
+            del request.session[mapping_key]
+            get_mapping(request, mapping_key)  # a side-effect of calling this is to update the session
+
+
 #
 # Cost table mappers
 #
 def show_cost_mapper(request, page_objs):
     # change the status to Paid or Due appropriately
     for page_obj in page_objs:
-        page_obj.status = STATUS_MAP[int(page_obj.status)]
+        page_obj.status = STATUS_MAP[page_obj.status]
         if isinstance(page_obj.date, date):
             page_obj.date = page_obj.date.strftime(DATE_FMT)
 
@@ -131,7 +182,7 @@ def show_earning_mapper(request, page_objs):
     unit_mapping = get_mapping(request, UNIT_MAPPING)
 
     for page_obj in page_objs:
-        page_obj.status = STATUS_MAP[int(page_obj.status)]
+        page_obj.status = STATUS_MAP[page_obj.status]
         if isinstance(page_obj.date, date):
             page_obj.date = page_obj.date.strftime(DATE_FMT)
         page_obj.sector = sector_mapping[page_obj.sector]
@@ -192,7 +243,7 @@ def show_fishbuy_mapper(request, page_objs):
     for page_obj in page_objs:
         if isinstance(page_obj.date, date):
             page_obj.date = page_obj.date.strftime(DATE_FMT)
-        page_obj.status = STATUS_MAP[int(page_obj.status)]
+        page_obj.status = STATUS_MAP[page_obj.status]
 
 
 def addup_fishbuy_mapper(request, field_data_lst):
@@ -226,3 +277,77 @@ def show_investment_mapper(request, page_objs):
     for page_obj in page_objs:
         if isinstance(page_obj.date, date):
             page_obj.date = page_obj.date.strftime(DATE_FMT)
+
+
+#
+# Loan Transaction mappers
+#
+def show_loan_transactions_mapper(request, page_objs):
+    for page_obj in page_objs:
+        if isinstance(page_obj.date, date):
+            page_obj.date = page_obj.date.strftime(DATE_FMT)
+
+
+#
+# Mousa mappers
+#
+def show_mousa_mapper(request, page_objs):
+    # get the mapping status_id -> status
+    status_mapping = get_mapping(request, STATUS_MAPPING)
+
+    for page_obj in page_objs:
+        if isinstance(page_obj.date, date):
+            page_obj.date = page_obj.date.strftime(DATE_FMT)
+            page_obj.status = status_mapping[int(page_obj.status)]
+
+
+def addup_mousa_mapper(request, field_data_lst):
+
+    # get the mapping status_id -> status
+    status_mapping = get_mapping(request, STATUS_MAPPING)
+
+    for field_data in field_data_lst:
+        col_name = field_data['col_name']
+        mapper = None
+        if col_name == 'Status':
+            mapper = status_mapping
+
+        # now just change the field values using the mapper
+        if mapper:
+            get_mapped_value(mapper, field_data)
+
+
+#
+# Salary mappers
+#
+def show_salary_mapper(request, page_objs):
+    # get the mapping status_id -> status
+    status_mapping = get_mapping(request, STATUS_MAPPING)
+
+    for page_obj in page_objs:
+        if isinstance(page_obj.date, date):
+            page_obj.date = page_obj.date.strftime(DATE_FMT)
+            page_obj.status = status_mapping[int(page_obj.status)]
+
+
+def addup_salary_mapper(request, field_data_lst):
+    # get the mapping status_id -> status
+    status_mapping = get_mapping(request, STATUS_MAPPING)
+
+    for field_data in field_data_lst:
+        col_name = field_data['col_name']
+        mapper = None
+        if col_name == 'Status':
+            mapper = status_mapping
+
+        # now just change the field values using the mapper
+        if mapper:
+            get_mapped_value(mapper, field_data)
+
+
+#
+# Users Info mappers
+#
+def show_usersinfo_mapper(request, page_objs):
+    for page_obj in page_objs:
+        page_obj.isactive = IS_ACTIVE[int(page_obj.isactive)]

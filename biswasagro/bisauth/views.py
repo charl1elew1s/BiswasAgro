@@ -1,11 +1,9 @@
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render, get_object_or_404, redirect
-from datetime import datetime, timezone
-from .models import Roles, Usersinfo
-from .forms import RolesForm, UsersInfoForm, RegistrationForm, LoginForm
-from common.utils import delete_tabel_row, show_table, add_update_table, LOGS_FMT, get_user_roles
-from common.column_mappers import remove_all_mappings
-from bisauth.models import Usersinfo, Roles
+from .models import *
+from .forms import *
+from common.utils import *
+from common.column_mappers import *
 
 # define the order of the User Roles from the least access to most, we use this when creating a new
 # user. The preferred role level is the one that has the least amount of access.
@@ -60,6 +58,7 @@ def logout(request):
 # Register a new user
 #
 def register(request):
+
     if request.method == 'GET':
         form = RegistrationForm()
     elif request.method == 'POST':
@@ -73,7 +72,7 @@ def register(request):
             user.password = hashed_password
             user.mobile = cleaned_data.get('mobile')
 
-            db_known_roles = get_user_roles()
+            db_known_roles = get_mapping(request, ROLE_MAPPING).values()
             # we will default to giving a new user the lowest level of access to the system, this value
             # could be changed by an Admin or Manager later
             # we loop over the ROLE_LEVELS until we find one that is defined in the database, if none was found
@@ -120,14 +119,26 @@ def register(request):
 # roles Table
 #
 def show_roles_table(request):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
     return show_table(request, 'bisauth', 'roles', Roles)
 
 
 def roles_delete_row(request, row_id):
-    return delete_tabel_row(Roles, row_id)
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return delete_tabel_row(request, Roles, row_id)
 
 
 def add_update_roles(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
     context = dict()
     return add_update_table(request, 'bisauth', 'roles',
                             Roles, RolesForm, row_id, set(), context)
@@ -137,15 +148,127 @@ def add_update_roles(request, row_id):
 # usersinfo Table
 #
 def show_usersinfo_table(request):
-    return show_table(request, 'bisauth', 'usersinfo', Usersinfo)
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return show_table(request, 'bisauth', 'usersinfo', Usersinfo, show_usersinfo_mapper)
 
 
 def usersinfo_delete_row(request, row_id):
-    return delete_tabel_row(Usersinfo, row_id)
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return delete_tabel_row(request, Usersinfo, row_id)
 
 
 def add_update_usersinfo(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
     skip_set = {'password', 'created_at', 'updated_at'}
     context = dict()
+    context['is_active'] = IS_ACTIVE  # a dict
+    context['roles'] = get_mapping(request, ROLE_MAPPING)  # a dict
+
     return add_update_table(request, 'bisauth', 'usersinfo',
                             Usersinfo, UsersInfoForm, row_id, skip_set, context)
+
+
+#
+# salary table
+#
+def show_salary_table(request):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return show_table(request, 'bisauth', 'salary', Salary, show_salary_mapper)
+
+
+def salary_delete_row(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return delete_tabel_row(request, Salary, row_id)
+
+
+def add_update_salary(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    skip_set = {'logs'}
+    context = dict()
+
+    status_map = get_mapping(request, STATUS_MAPPING)
+    context['status'] = status_map
+
+    # we'll use the hardcoded values for the 'purpose' field
+    context['purposes'] = SALARY_PURPOSE
+
+    return add_update_table(request, 'bisauth', 'salary',
+                            Salary, SalaryForm, row_id, skip_set, context, addup_salary_mapper)
+
+
+#
+# staff table
+#
+def show_staff_table(request):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return show_table(request, 'bisauth', 'staff', Staff)
+
+
+def staff_delete_row(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return delete_tabel_row(request, Staff, row_id)
+
+
+def add_update_staff(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    skip_set = {'staffno', 'log'}
+    context = dict()
+    return add_update_table(request, 'bisauth', 'staff',
+                            Staff, StaffForm, row_id, skip_set, context)
+
+
+#
+# staffs table
+#
+def show_staffs_table(request):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return show_table(request, 'bisauth', 'staffs', Staffs)
+
+
+def staffs_delete_row(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return delete_tabel_row(request, Staffs, row_id)
+
+
+def add_update_staffs(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    skip_set = set()
+    context = dict()
+    return add_update_table(request, 'bisauth', 'staffs',
+                            Staffs, StaffsForm, row_id, skip_set, context)

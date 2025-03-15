@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, reverse
-from .models import Cost, Costitems, Costpurpose, Earning, Investment, Loandetails
-from .forms import CostForm, CostItemsForm, CostPurposeForm, EarningForm, InvestmentForm, LoanDetailsForm
+from .models import *
+from .forms import *
 from common.utils import *
 from common.column_mappers import *
 
@@ -21,7 +21,7 @@ def cost_delete_row(request, row_id):
     if not is_in:
         return redirect('bisauth:login')
 
-    return delete_tabel_row(Cost, row_id)
+    return delete_tabel_row(request, Cost, row_id)
 
 
 def add_update_cost(request, row_id):
@@ -71,7 +71,7 @@ def costitems_delete_row(request, row_id):
     if not is_in:
         return redirect('bisauth:login')
 
-    return delete_tabel_row(Costitems, row_id)
+    return delete_tabel_row(request, Costitems, row_id)
 
 
 def add_update_costitems(request, row_id):
@@ -106,7 +106,7 @@ def costpurpose_delete_row(request, row_id):
     if not is_in:
         return redirect('bisauth:login')
 
-    return delete_tabel_row(Costpurpose, row_id)
+    return delete_tabel_row(request, Costpurpose, row_id)
 
 
 def add_update_costpurpose(request, row_id):
@@ -135,7 +135,7 @@ def earning_delete_row(request, row_id):
     if not is_in:
         return redirect('bisauth:login')
 
-    return delete_tabel_row(Earning, row_id)
+    return delete_tabel_row(request, Earning, row_id)
 
 
 def add_update_earning(request, row_id):
@@ -180,7 +180,7 @@ def investment_delete_row(request, row_id):
     if not is_in:
         return redirect('bisauth:login')
 
-    return delete_tabel_row(Investment, row_id)
+    return delete_tabel_row(request, Investment, row_id)
 
 
 def add_update_investment(request, row_id):
@@ -201,7 +201,7 @@ def show_loandetails_table(request):
     if not is_in:
         return redirect('bisauth:login')
 
-    return show_table(request, 'costs', 'loandetails', Loandetails)#, show_investment_mapper)
+    return show_table(request, 'costs', 'loandetails', Loandetails)
 
 
 def loandetails_delete_row(request, row_id):
@@ -209,7 +209,7 @@ def loandetails_delete_row(request, row_id):
     if not is_in:
         return redirect('bisauth:login')
 
-    return delete_tabel_row(Loandetails, row_id)
+    return delete_tabel_row(request, Loandetails, row_id)
 
 
 def add_update_loandetails(request, row_id):
@@ -220,3 +220,62 @@ def add_update_loandetails(request, row_id):
     context = dict()
     return add_update_table(request, 'costs', 'loandetails',
                             Loandetails, LoanDetailsForm, row_id, {'loanid', 'logs'}, context)
+
+
+#
+# Loan Providers Info Table
+#
+def show_loan_providers_info_table(request):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return show_table(request, 'costs', 'loan_providers_info', LoanProvidersInfo)
+
+
+def loan_providers_info_delete_row(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return delete_tabel_row(request, LoanProvidersInfo, row_id)
+
+
+def add_update_loan_providers_info(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    context = dict()
+    return add_update_table(request, 'costs', 'loan_providers_info',
+                            LoanProvidersInfo, LoanProvidersInfoForm, row_id, {'investerid', 'logs'}, context)
+
+
+#
+# Loan Transactions Table
+#
+def show_loan_transactions_table(request):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return show_table(request, 'costs', 'loan_transactions', LoanTransactions,
+                      show_loan_transactions_mapper)
+
+
+def loan_transactions_delete_row(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    return delete_tabel_row(request, LoanTransactions, row_id)
+
+
+def add_update_loan_transactions(request, row_id):
+    is_in = 'user' in request.session
+    if not is_in:
+        return redirect('bisauth:login')
+
+    context = dict()
+    return add_update_table(request, 'costs', 'loan_transactions',
+                            LoanTransactions, LoanTransactionsForm, row_id, set(), context)

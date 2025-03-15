@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Loan Providers Info Entry
+{% endblock %}
+
+{% block main-content %}
+<div class="form-container">
+    <div class="form-box">
+        <h2>{{heading}}</h2>
+            <form action="{% url 'costs:addup_loan_providers_info' row_id=row_id %}" method="post">
+                {% csrf_token %}
+                <label for="{{ form.name.id_for_label }}">{{ form.name.label }}:</label>
+                {{ form.name }}
+                {{ form.name.errors }}
+
+                <label for="{{ form.address.id_for_label }}">{{ form.address.label }}:</label>
+                {{ form.address }}
+                {{ form.address.errors }}
+
+                <label for="{{ form.mobile.id_for_label }}">{{ form.mobile.label }}:</label>
+                {{ form.mobile }}
+                {{ form.mobile.errors }}
+
+                <label for="{{ form.refference.id_for_label }}">{{ form.refference.label }}:</label>
+                {{ form.refference }}
+                {{ form.refference.errors }}
+
+            <div class="button-group">
+                <button type="button" onclick="history.back()" class="cancel-btn">Cancel</button>
+                <button type="submit" class="save-btn">Save</button>
+            </div>
+</form>
+</div>
+
+{% endblock %}

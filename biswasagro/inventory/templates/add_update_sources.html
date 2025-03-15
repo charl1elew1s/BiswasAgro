@@ -1,18 +1,18 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-BiswasAgro - Roles Entry
+BiswasAgro - Sources Entry
 {% endblock %}
 
 {% block main-content %}
 <div class="form-container">
     <div class="form-box">
         <h2>{{heading}}</h2>
-            <form action="{% url 'bisauth:addup_roles' row_id=row_id %}" method="post">
+            <form action="{% url 'inv:addup_sources' row_id=row_id %}" method="post">
                 {% csrf_token %}
-                <label for="{{ form.role.id_for_label}}">{{form.role.label}}:</label>
-                {{ form.role }}
-                {{ form.role.errors }}
+                <label for="{{ form.source.id_for_label }}">{{ form.source.label }}:</label>
+                {{ form.source }}
+                {{ form.source.errors }}
 
             <div class="button-group">
                 <button type="button" onclick="history.back()" class="cancel-btn">Cancel</button>

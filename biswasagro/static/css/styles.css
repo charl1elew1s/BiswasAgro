@@ -513,3 +513,7 @@ end orig */
     padding: 0;
     line-height: 2.2;
 }
+
+a.disabled {
+    pointer-events: none;
+}

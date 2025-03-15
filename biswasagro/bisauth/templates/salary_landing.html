@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Salary Table
+{% endblock %}
+
+{% block main-content %}
+        <div class="table-wrapper">
+            <h2>Salary</h2>
+            <div class="table-container">
+                <table>
+                        <tr>
+                            <th>Date</th>
+                            <th>Purpose</th>
+                            <th>Reason</th>
+                            <th>Qty</th>
+                            <th>Rate</th>
+                            <th>Total</th>
+                            <th>Personnel</th>
+                            <th>Voucher</th>
+                            <th>Status</th>
+                            <th>Comments</th>
+                            {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
+                            <th>Actions</th>
+                            {% endif %}
+                        </tr>
+                    <tbody>
+                    {% for a_page in page_objs %}
+                        <tr>
+                            <td>{{a_page.date}}</td>
+                            <td>{{a_page.purpose}}</td>
+                            <td>{{a_page.reason}}</td>
+                            <td>{{a_page.quantity}}</td>
+                            <td>{{a_page.rate}}</td>
+                            <td>{{a_page.total}}</td>
+                            <td>{{a_page.personel}}</td>
+                            <td>{{a_page.voucher}}</td>
+                            <td>{{a_page.status}}</td>
+                            <td>{{a_page.comment}}</td>
+                            {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
+                            <td>
+                                <a href="{% url 'bisauth:addup_salary' row_id=a_page.id %}" class="action-link">Edit</a>
+                            {% endif %}
+                            {% if request.session.user.role == 'Admin' %}
+                                 | <a href="#" class="action-link delete-table-entry" table-id="bisauth/salary" data-id="{{a_page.id}}">Delete</a>
+                            </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+{% include 'pagination_control.html' %}
+
+<!--CL we can put a search selection here            -->
+<!--<label for="c_search">Choose search</label>-->
+<!--<select name="c_search" id="c_search">-->
+<!--    <option value="date">date</option>-->
+<!--    <option value="id">id</option>-->
+<!--</select>-->
+<!-- CL end search selection-->
+
+{% endblock %}

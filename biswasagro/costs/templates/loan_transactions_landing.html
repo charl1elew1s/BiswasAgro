@@ -1,16 +1,20 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-Units Table
+Loan Transactions Table
 {% endblock %}
 
 {% block main-content %}
         <div class="table-wrapper">
-            <h2>Units Table</h2>
+            <h2>Loan Transactions</h2>
             <div class="table-container">
                 <table>
                         <tr>
-                            <th>Unit</th>
+                            <th>Date</th>
+                            <th>Loan ID</th>
+                            <th>Investor ID</th>
+                            <th>Payment</th>
+                            <th>Voucher No.</th>
                             {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <th>Actions</th>
                             {% endif %}
@@ -18,13 +22,17 @@ Units Table
                     <tbody>
                     {% for a_page in page_objs %}
                         <tr>
-                            <td>{{a_page.unit}}</td>
+                            <td>{{a_page.date}}</td>
+                            <td>{{a_page.loanid}}</td>
+                            <td>{{a_page.investerid}}</td>
+                            <td>{{a_page.payment}}</td>
+                            <td>{{a_page.voucherno}}</td>
                             {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <td>
-                                <a href="{% url 'inv:addup_units' row_id=a_page.id %}" class="action-link">Edit</a>
+                                <a href="{% url 'costs:addup_loan_transactions' row_id=a_page.id %}" class="action-link">Edit</a>
                                 {% endif %}
                                 {% if request.session.user.role == 'Admin' %}
-                                | <a href="#" class="action-link delete-table-entry" table-id="inv/units" data-id="{{a_page.id}}">Delete</a>
+                                | <a href="#" class="action-link delete-table-entry" table-id="costs/loan_transactions" data-id="{{a_page.id}}">Delete</a>
                             </td>
                             {% endif %}
                         </tr>

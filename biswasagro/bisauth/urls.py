@@ -18,4 +18,20 @@ urlpatterns = [
     path('usersinfo', views.show_usersinfo_table, name='show_usersinfo_table'),
     path('addup_usersinfo/<int:row_id>', views.add_update_usersinfo, name="addup_usersinfo"),
     path('usersinfo/delete/<int:row_id>', views.usersinfo_delete_row, name='usersinfo_delete_row'),
+
+    # handle the `salary` table
+    path('salary', views.show_salary_table, name='show_salary_table'),
+    path('addup_salary/<int:row_id>', views.add_update_salary, name="addup_salary"),
+    path('salary/delete/<int:row_id>', views.salary_delete_row, name='salary_delete_row'),
+
+    # handle the `staff` table
+    path('staff', views.show_staff_table, name='show_staff_table'),
+    path('addup_staff/<int:row_id>', views.add_update_staff, name="addup_staff"),
+    path('staff/delete/<int:row_id>', views.staff_delete_row, name='staff_delete_row'),
+
+    # handle the `staffs` table
+    path('staffs', views.show_staffs_table, name='show_staffs_table'),
+    path('addup_staffs/<int:row_id>', views.add_update_staffs, name="addup_staffs"),
+    path('staffs/delete/<int:row_id>', views.staffs_delete_row, name='staffs_delete_row'),
+
 ]

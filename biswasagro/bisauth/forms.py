@@ -10,13 +10,17 @@ class UsersInfoForm(ModelForm):
         model = Usersinfo
         fields = ['name', 'username', 'role', 'isactive', 'email', 'mobile']
 
+        widgets = {
+            'mobile': forms.TextInput(attrs={'maxlength': 20})
+        }
+
         labels = {
             'name': 'Name',
             'username': 'Username',
+            'email': 'Email',
+            'mobile': 'Mobile',
             'role': 'Role',
             'isactive': 'Is Active',
-            'email': 'Email',
-            'mobile': 'Mobile'
         }
         error_messages = {
             'name': {
@@ -59,7 +63,7 @@ class SalaryForm(ModelForm):
             'reason': 'Reason',
             'quantity': 'Quantity',
             'rate': 'Rate',
-            'total': 'total',
+            'total': 'Total',
             'personel': 'Personnel',
             'voucher': 'Voucher',
             'status': 'Status',

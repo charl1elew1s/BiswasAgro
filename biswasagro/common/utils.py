@@ -10,7 +10,7 @@ from django.urls import reverse
 from bisauth.models import Roles
 from decimal import Decimal
 from datetime import datetime, timezone
-from inventory.models import Sectors
+from .column_mappers import update_cache
 
 DATE_FMT = '%Y-%m-%d'
 LOGS_FMT = '%Y-%m-%d %H:%M:%S'
@@ -28,25 +28,19 @@ TBL_2_NAME = {
     'items': 'Items',
     'land': 'Land',
     'loandetails': 'Loan Details',
+    'loan_transactions': 'Loan Transactions',
     'loan_providers_info': 'Loan Providers',
     'mousa': 'Mousa',
     'mousaname': 'Mousa Names',
     'salary': 'Salary',
     'sectors': 'Sectors',
+    'sources': 'Sources',
     'staff': 'Staff',
     'staffs': 'Staffs',
     'units': 'Units',
     'roles': 'Roles',
     'usersinfo': 'Users',
     'term': 'Term'
-}
-
-# these are the primary keys for a given table (the default primary key field name is 'id' so we only put tables
-# in this dictionary that DO NOT have 'id' as it's primary key)
-TABLE_PK_FIELDS = {
-    'loandetails': 'loanid',
-    'loan_providers_info': 'investerid',
-    'staff': 'staffNo',
 }
 
 STATUS_LIST = [(1, 'Paid'), (2, 'Due')]
@@ -132,21 +126,17 @@ def find_update_diffs(request, model_obj, skip_cases=set()):
         del request.session['orig']
 
     # return the list of col_dict objects for each field of the model_obj
-    # CL: ++
-    # print("\nfield_data values:\n")
-    # for field_dict in field_data:
-    #     print(f"  field_dict: {field_dict}")
-    # print("\n")
-    # CL: --
     return field_data
 
 
-def delete_tabel_row(table_model_obj, row_id):
+def delete_tabel_row(request, table_model_obj, row_id):
     try:
         pk_name = table_model_obj._meta.pk.name
         kwargs = {pk_name: row_id}
         model_obj = table_model_obj.objects.get(**kwargs)
+        table_name = table_model_obj._meta.db_table
         model_obj.delete()
+        update_cache(request, table_name)
         return JsonResponse({"success": True})
     except Exception as e:
         response_json = {'success': False,
@@ -208,10 +198,6 @@ def add_update_table(request, app_name: str, table_name: str,
             # save the original fields and their values in the session so that we can report
             # on which were changed during the edit process (when this method is called via a POST request)
             add_fields_to_session(request, model_obj)
-            # CL: ++
-            #  : let's see the values in the session 'orig'
-            # print(f"request.session['orig']: {request.session['orig']}")
-            # CL: --
 
     elif request.method == 'POST':
         # if row_id is 0, it's a new record, so we just create a new form
@@ -254,17 +240,20 @@ def add_update_table(request, app_name: str, table_name: str,
                 # nothing to do here we were just checking if the field was there
                 pass
 
-            # hash the password field if it exists on the Model Object
+            # hash the password field if it exists on the Form Object
             try:
-                password_field = table_model_obj._meta.get_field('password')
-                if password_field:
-                    password_hash = get_field_data(field_data, 'password')
-                    model_instance.password = password_hash
+                form_fields = table_form_obj._meta.fields
+                if 'password' in form_fields:
+                    password_field = table_model_obj._meta.get_field('password')
+                    if password_field:
+                        password_hash = get_field_data(field_data, 'password')
+                        model_instance.password = password_hash
             except FieldDoesNotExist as fde:
                 # nothing to do here
                 pass
 
             model_instance.save()
+            update_cache(request, table_name)
 
             post_skip_data = []
             form_labels = form.Meta.labels
@@ -273,12 +262,6 @@ def add_update_table(request, app_name: str, table_name: str,
                 # (to make them more human readable)
                 field_dict['col_name'] = form_labels[field_dict['col_name']]
                 post_skip_data.append(field_dict)
-
-            # CL: ++
-            # print("\npost_skip_data:\n")
-            # for field_dict in post_skip_data:
-            #     print(f"  field_dict: {field_dict}")
-            # CL: --
 
             if col_mapper:
                 col_mapper(request, post_skip_data)
@@ -316,15 +299,6 @@ def add_update_table(request, app_name: str, table_name: str,
 
     add_update_template_name = f"add_update_{table_name}.html"
     return render(request, add_update_template_name, context)
-
-
-def get_user_roles():
-    """Returns a list of all the values in the role table"""
-    role_names = []
-    qs = Roles.objects.all()
-    for role_obj in qs:
-        role_names.append(role_obj.role)
-    return role_names
 
 
 def get_field_data(field_data, key):

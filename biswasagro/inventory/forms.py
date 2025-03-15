@@ -151,18 +151,18 @@ class MousaForm(ModelForm):
         fields = ['mousa', 'dag', 'owner', 'date', 'amount', 'term', 'vc_numnber', 'status', ]
 
         labels = {
+            'date': 'Date',
             'mousa': 'Mousa',
             'dag': 'Dag',
             'owner': 'Owner',
-            'date': 'Date',
             'amount': 'Amount',
+            'status': 'Status',
             'term': 'Term',
             'vc_numnber': 'VC Number',
-            'status': 'Status'
         }
 
 
-class MousaName(ModelForm):
+class MousaNameForm(ModelForm):
     class Meta:
         model = Mousaname
         fields = ['name']

@@ -119,6 +119,10 @@ class LoanProvidersInfoForm(ModelForm):
         model = LoanProvidersInfo
         fields = ['name', 'address', 'mobile', 'refference']
 
+        widgets = {
+            'mobile': forms.TextInput(attrs={'maxlength': 20})
+        }
+
         labels = {
             'name': 'Name',
             'address': 'Address',
@@ -137,7 +141,7 @@ class LoanTransactionsForm(ModelForm):
         fields = ['loanid', 'investerid', 'date', 'payment', 'voucherno',]
 
         labels = {
-            'loadid': 'Loan ID',
+            'loanid': 'Loan ID',
             'investerid': 'Investor ID',
             'date': 'Date',
             'payment': 'Payment',
