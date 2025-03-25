@@ -3,6 +3,13 @@
                     {% if not skipAddButton  %}
                         <a href="{% url add_url row_id=0 %}" class="pagination-button">Add New Entry</a>
                     {% endif %}
+                    {% if messages %}
+                      {% for message in messages %}
+                       {% if 'temporary' in message.tags %}
+                           <p class="new-user">{{ message }}</p>
+                       {% endif %}
+                      {% endfor %}
+                    {% endif %}
                 </div>
                 <div class=pagination-right">
                     {% if page_objs.has_previous %}

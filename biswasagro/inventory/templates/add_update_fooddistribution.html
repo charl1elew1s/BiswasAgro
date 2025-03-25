@@ -19,7 +19,15 @@ BiswasAgro - Food Distribution Entry
                 {{ form.gher.errors }}
 
                 <label for="{{ form.item.id_for_label }}">{{ form.item.label }}:</label>
-                {{ form.item }}
+                <select name="{{form.item.name}}" id="{{ form.item.id_for_label }}">
+                    {% for item_id, item_name in items.items %}
+                      {% if request.session.orig.item == item_id %}
+                         <option value="{{ item_id }}" selected>{{ item_name }}</option>
+                      {% else %}
+                         <option value="{{ item_id }}">{{ item_name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
                 {{ form.item.errors }}
 
                 <label for="{{ form.amount.id_for_label }}">{{ form.amount.label }}:</label>
@@ -27,7 +35,15 @@ BiswasAgro - Food Distribution Entry
                 {{ form.amount.errors }}
 
                 <label for="{{ form.unit.id_for_label }}">{{ form.unit.label }}:</label>
-                {{ form.unit }}
+                <select name="{{form.unit.name}}" id="{{ form.unit.id_for_label }}">
+                    {% for unit_id, unit_name in units.items %}
+                      {% if request.session.orig.unit == unit_id %}
+                         <option value="{{ unit_id }}" selected>{{ unit_name }}</option>
+                      {% else %}
+                         <option value="{{ unit_id }}">{{ unit_name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                </select>
                 {{ form.unit.errors }}
 
             <div class="button-group">

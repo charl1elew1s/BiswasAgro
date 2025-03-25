@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Form
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.hashers import check_password
@@ -150,21 +151,107 @@ class LoginForm(Form):
     password = forms.CharField(label='Password', widget=forms.PasswordInput, required=True)
 
     def clean(self):
-        cleaned_data = super().clean()
-        username = cleaned_data.get('username')
-        password = cleaned_data.get('password')
+        try:
+            cleaned_data = super().clean()
+            username = cleaned_data.get('username')
+            password = cleaned_data.get('password')
 
-        # see if the user exists
-        qs = Usersinfo.objects.filter(username=username)
-        if not qs.exists():
-            raise forms.ValidationError("Username does not exist.")
+            # see if the user exists
+            qs = Usersinfo.objects.filter(username=username)
+            if not qs.exists():
+                raise forms.ValidationError("Username does not exist.")
 
-        user = qs[0]
-        if not user.isactive:
-            raise forms.ValidationError(f"User: {user.username} is inactive")
+            user = qs[0]
+            if not user.isactive:
+                raise forms.ValidationError(f"User: {user.username} is inactive")
 
-        # check the password with the hash in the database
-        if not check_password(password, user.password):
-            raise forms.ValidationError("Incorrect password.")
+            # check the password with the hash in the database
+            if not check_password(password, user.password):
+                raise forms.ValidationError("Incorrect password.")
+
+        except ValidationError as ve:
+            # we get here if super().clean() fails
+            # we use this block to skip our custom validations and to just reraise the Error
+            raise ve
+
+        return cleaned_data
+
+
+class ChangePasswordForm(Form):
+    username = forms.CharField(max_length=255, required=True)
+    password = forms.CharField(widget=forms.PasswordInput, required=True)
+    new_password = forms.CharField(widget=forms.PasswordInput, required=True, validators=[validate_password])
+    confirm_password = forms.CharField(widget=forms.PasswordInput, required=True)
+
+    labels = {
+        'username': 'Username',
+        'password': 'Password',
+        'new_password': 'New Password',
+        'confirm_password': 'Confirm New Password',
+    }
+
+    def clean(self):
+        try:
+            cleaned_data = super().clean()
+            username = cleaned_data.get('username')
+            password = cleaned_data.get('password')
+            new_password = cleaned_data.get('new_password')
+            confirm_password = cleaned_data.get('confirm_password')
+
+            # see if the user exists
+            qs = Usersinfo.objects.filter(username=username)
+            if not qs.exists():
+                raise forms.ValidationError("Username does not exist.")
+
+            user = qs[0]
+            if not user.isactive:
+                raise forms.ValidationError(f"User: {user.username} is inactive")
+
+            # check the password with the hash in the database
+            if not check_password(password, user.password):
+                raise forms.ValidationError("Incorrect password.")
+
+            # see if new password is the same as the old password
+            if new_password == password:
+                raise forms.ValidationError("New Password and Existing Passwords are the same")
+
+            # see if the new password and the confirm_passwords match
+            if new_password != confirm_password:
+                raise forms.ValidationError("Confirm Password does not match New Password")
+
+        except ValidationError as ve:
+            # we get here if super().clean() fails
+            # we use this block to skip our custom validations
+            raise ve
+
+        return cleaned_data
+
+
+class AdminChPasswordForm(Form):
+    username = forms.CharField(max_length=255, required=True)
+    new_password = forms.CharField(widget=forms.PasswordInput, required=True, validators=[validate_password])
+    confirm_password = forms.CharField(widget=forms.PasswordInput, required=True)
+
+    labels = {
+        'username': 'Username',
+        'new_password': 'New Password',
+        'confirm_password': 'Confirm New Password',
+    }
+
+    def clean(self):
+        try:
+            cleaned_data = super().clean()
+            username = cleaned_data.get('username')
+            new_password = cleaned_data.get('new_password')
+            confirm_password = cleaned_data.get('confirm_password')
+
+            # see if the new password and the confirm_passwords match
+            if new_password != confirm_password:
+                raise forms.ValidationError("Confirm Password does not match New Password")
+
+        except ValidationError as ve:
+            # we get here if super().clean() fails
+            # we use this block to skip our custom validations
+            raise ve
 
         return cleaned_data

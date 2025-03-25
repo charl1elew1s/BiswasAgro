@@ -19,6 +19,9 @@ Users Table
                             {% if request.session.user.role == 'Admin' or request.session.user.role == 'Manager' %}
                             <th>Actions</th>
                             {% endif %}
+                            {% if request.session.user.role == 'Admin' %}
+                            <th>Password</th>
+                            {% endif %}
                         </tr>
                     <tbody>
                     {% for a_page in page_objs %}
@@ -36,6 +39,9 @@ Users Table
                                 {% if request.session.user.role == 'Admin' %}
                                 | <a href="#" class="action-link delete-table-entry" table-id="bisauth/usersinfo" data-id="{{a_page.id}}">Delete</a>
                             </td>
+                            {% endif %}
+                            {% if request.session.user.role == 'Admin' %}
+                            <td><a href="{% url 'bisauth:admin_ch_pass' row_id=a_page.id %}" class="action-link">Change</a></td>
                             {% endif %}
                         </tr>
                     {% endfor %}

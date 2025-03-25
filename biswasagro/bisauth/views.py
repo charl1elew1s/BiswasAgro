@@ -1,4 +1,5 @@
 from django.contrib.auth.hashers import make_password
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
 from .forms import *
@@ -113,6 +114,90 @@ def register(request):
     context = dict()
     context['form'] = form
     return render(request, 'register.html', context)
+
+
+def change_password(request):
+    """This function handles the case where a user is changing their own password"""
+
+    if request.method == 'GET':
+        form = ChangePasswordForm()
+    elif request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+
+    if form.is_valid():
+        # process the password change here
+        cleaned_data = form.cleaned_data
+        userinfo = Usersinfo.objects.filter(username=cleaned_data.get('username'))
+        user = None
+        if userinfo.exists():
+            user = userinfo[0]
+
+            # we know we have valid data from the form (and now it's in cleaned_data) so we just save the
+            # new_password on the user object and save to the DB
+            new_password = cleaned_data.get('new_password')
+            hashed_password = make_password(new_password)
+            user.password = hashed_password
+            user.save()
+            # present the login form and indicate that the password was changed
+            context = dict()
+            form = LoginForm()
+            context['password_updated'] = True
+            context['username'] = cleaned_data.get('username')
+            context['form'] = form
+            return render(request, 'login.html', context)
+    else:
+        # render the form again with errors
+        return render(request, 'change_pass.html', {'form': form})
+
+
+def admin_ch_password(request, row_id):
+    """This function handles the case where an Admin is changing the password of another user"""
+
+    if 'user' not in request.session or request.session['user']['role'] != 'Admin':
+        # this means if we're not logged in or the logged-in user is NOT an Admin therefore this functionality
+        # is not allowed so redirect the user to the home page
+        return render(request, 'home.html', {})
+
+    if request.method == 'GET':
+        # get the username from the row_id
+        model_obj = get_object_or_404(Usersinfo, pk=row_id)  # get the object to update
+        # set the username from the model_obj on the form
+        form = AdminChPasswordForm(initial={'username': model_obj.username})
+        context = dict()
+        context['form'] = form
+        context['username'] = model_obj.username
+        context['row_id'] = row_id
+        return render(request, 'admin_ch_pass.html', context)
+    elif request.method == 'POST':
+
+        form = AdminChPasswordForm(request.POST)
+
+        if form.is_valid():
+            # process the password change here
+            cleaned_data = form.cleaned_data
+
+            userinfo = Usersinfo.objects.filter(username=cleaned_data.get('username'))
+            # we know this user exists so it's safe to index the 0th item
+            user = userinfo[0]
+
+            # we also know we have valid data from the form (and now it's in cleaned_data) so we just save the
+            # new_password on the user object and save to the DB
+            new_password = cleaned_data.get('new_password')
+            hashed_password = make_password(new_password)
+            user.password = hashed_password
+            user.save()
+
+            msg_text = f"password changed for user {cleaned_data.get('username')}"
+            messages.add_message(request, messages.INFO, msg_text, extra_tags='temporary')
+            return redirect('bisauth:show_usersinfo_table')
+        else:
+            # render the form again with errors
+            model_obj = get_object_or_404(Usersinfo, pk=row_id)  # get the object to update
+            context = dict()
+            context['username'] = model_obj.username
+            context['form'] = form
+            context['row_id'] = row_id
+            return render(request, 'admin_ch_pass.html', context)
 
 
 #

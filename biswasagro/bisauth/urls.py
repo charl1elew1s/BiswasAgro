@@ -7,6 +7,8 @@ urlpatterns = [
     # handle login and register
     path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
+    path('change_pass/', views.change_password, name='change_password'),
+    path('admin_ch_pass/<int:row_id>', views.admin_ch_password, name='admin_ch_pass'),
     path('logout/', views.logout, name='logout'),
 
     # handle the `roles` table

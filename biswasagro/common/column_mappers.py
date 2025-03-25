@@ -265,9 +265,36 @@ def addup_fishbuy_mapper(request, field_data_lst):
 # Food Distribution mappers
 #
 def show_fooddistribution_mapper(request, page_objs):
+    # get mappings items_id -> items_name
+    items_mapping = get_mapping(request, ITEMS_MAPPING)
+
+    # get mappings unit_id -> unit
+    unit_mapping = get_mapping(request, UNIT_MAPPING)
+
     for page_obj in page_objs:
         if isinstance(page_obj.date, date):
             page_obj.date = page_obj.date.strftime(DATE_FMT)
+        page_obj.item = items_mapping[int(page_obj.item)]
+        page_obj.unit = unit_mapping[int(page_obj.unit)]
+
+
+def addup_fooddistribution_mapper(request, field_data_lst):
+    # get the mapping items_id -> item
+    items_mapping = get_mapping(request, ITEMS_MAPPING)
+
+    # get the mapping unit_id -> unit
+    units_mapping = get_mapping(request, UNIT_MAPPING)
+
+    for field_data in field_data_lst:
+        col_name = field_data['col_name']
+        mapper = None
+        if col_name == 'Item':
+            mapper = items_mapping
+        elif col_name == 'Unit':
+            mapper = units_mapping
+        # now just change the field values using the mapper
+        if mapper:
+            get_mapped_value(mapper, field_data)
 
 
 #

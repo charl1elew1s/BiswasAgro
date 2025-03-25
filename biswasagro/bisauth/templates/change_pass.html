@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - BiswasAgro</title>
+    <title>Change Password - BiswasAgro</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src="{% static 'js/support.js' %}" defer></script>
 </head>
 <body>
     <div class="register-container">
         <div class="form-box">
-            <h2>BiswasAgro Login</h2>
-            <form action="{% url 'bisauth:login' %}" method="post">
+            <h2>Change Password</h2>
+            <form action="{% url 'bisauth:change_password' %}" method="post">
                 {% csrf_token %}
 
                 <label for="{{ form.username.id_for_label }}">{{ form.username.label }}:</label>
@@ -23,6 +23,14 @@
                 {{ form.password }}
                 {{ form.password.errors }}
 
+                <label for="{{ form.new_password.id_for_label }}">{{ form.new_password.label }}:</label>
+                {{ form.new_password }}
+                {{ form.new_password.errors }}
+
+                <label for="{{ form.confirm_password.id_for_label }}">{{ form.confirm_password.label }}:</label>
+                {{ form.confirm_password }}
+                {{ form.confirm_password.errors }}
+
                  {% if form.non_field_errors %}  {# Display non-field errors #}
                 <ul class="errorlist">
                     {% for error in form.non_field_errors %}
@@ -31,24 +39,12 @@
                 </ul>
                 {% endif %}
 
-                {% if new_user %}
-                <ul class="new-user">
-                    <li>account created for username: {{ new_user }}</li>
-                </ul>
-                {% endif %}
-
-                {% if password_updated %}
-                <ul class="new-user">
-                    <li>password changed for username: {{ username }}</li>
-                </ul>
-                {% endif %}
-
-                <div>
-                    <button type="submit" class="save-btn">Login</button>
-                    <p>Don't have an account? <a href="{% url 'bisauth:register' %}">Register a new account</a><br/>
-                    Existing user <a href="{% url 'bisauth:change_password' %}">Change password</a> </p>
+                <div class="button-group">
+                    <button type="button" onclick="history.back()" class="cancel-btn">Cancel</button>
+                    <button type="submit" class="save-btn">Save</button>
                 </div>
 
+            </form>
         </div>
     </div>
 </body>

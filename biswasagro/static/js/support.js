@@ -47,14 +47,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
-//    // existing login code
-//    const loginButton = document.querySelector("button");
-//    if (loginButton) {
-//        loginButton.addEventListener("click", function() {
-//            window.location.href = "home.html";
-//        });
-//    }
-
 // Function to get CSRF token from cookies
 function getCSRFToken() {
     let cookieValue = null;

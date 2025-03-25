@@ -91,8 +91,11 @@ def add_update_fooddistribution(request, row_id):
         return redirect('bisauth:login')
 
     context = dict()
+    context['items'] = get_mapping(request, ITEMS_MAPPING)
+    context['units'] = get_mapping(request, UNIT_MAPPING)
+
     return add_update_table(request, 'inv', 'fooddistribution', Fooddistribution,
-                            FoodDistributionForm, row_id, {'logs'}, context)
+                            FoodDistributionForm, row_id, {'logs'}, context, addup_fooddistribution_mapper)
 
 
 def fooddistribution_delete_row(request, row_id):
