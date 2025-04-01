@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Fish Count Details Report
+{% endblock %}
+
+{% block main-content %}
+
+{% include 'top_nav.html' %}
+
+<div class="content-area">
+   <div class="report-content">
+      <h2>Fish Delivery Details Report</h2>
+      <p>report generated at: {{ right_now }}</p>
+
+       {% for area, fb_lst in value_dict.items %}
+       {% if fb_lst|length > 0 %}
+       <h3>Area: {{area}}</h3>
+      <table>
+        <tr>
+          <th>Fish</th>
+          <th>Quantity</th>
+          <th>Number</th>
+          <th>Price</th>
+          <th>Source</th>
+          <th>Date</th>
+        </tr>
+          {% for fishbuy in fb_lst %}
+          <tr>
+              <td>{{fishbuy.fishname}}</td>
+              <td>{{fishbuy.fishquantity}}</td>
+              <td>{{fishbuy.buyamount}}</td>
+              <td>{{fishbuy.price}}</td>
+              <td>{{fishbuy.buyfrom}}</td>
+              <td>{{fishbuy.date}}</td>
+          </tr>
+          {% endfor %}
+      </table>
+       {% else %}
+       <h2>No values to display for this area</h2>
+       {% endif %}
+       {% endfor %}
+
+</div>
+</div>
+{% endblock %}

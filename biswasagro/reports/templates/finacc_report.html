@@ -1,0 +1,98 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Financial Accounting Report
+{% endblock %}
+
+{% block main-content %}
+
+{% include 'top_nav.html' %}
+
+<div class="content-area">
+   <div class="report-content">
+           <form id="date_form" method="post" action="{% url 'reports:finacc' str_date='none' %}">
+               {% csrf_token %}
+                <label for="{{ form.fr_date.id_for_label }}">{{ form.fr_date.label }}:</label>
+               {{ form.fr_date }}
+               {{ form.fr_date.errors }}
+
+                <label for="{{ form.to_date.id_for_label }}">{{ form.to_date.label }}:</label>
+               {{ form.to_date }}
+               {{ form.to_date.errors }}
+
+               <button type="submit">Search</button>
+           </form>
+
+<br/>
+<p>report generated at: {{ right_now }}</p>
+
+<br/>
+  <table>
+    <tr>
+        <th colspan="6"><h2>Unity Agro Pvt. Ltd.</h2></th>
+    </tr>
+    <tr>
+        <td colspan="6" ><h3>Ledger Balance year to date until 25-03-2025</h3></td>
+    </tr>
+<tr>
+  <td colspan="3" class="report-left">Previous Debit (01/04/2024 to 31/01/2025)</td>
+  <td class="report-right">1,561,586.00</td>
+  <td class="report-left">Final Balance</td>
+  <td class="report-right">-9,954,879.00</td>
+</tr>
+<tr>
+  <td colspan="3" class="report-left">Previous Credit (01/04/2024 to 31/01/2025)</td>
+  <td class="report-right">1,141,260.00</td>
+  <td class="report-left">Loan</td>
+  <td class="report-right">-</td>
+</tr>
+<tr>
+  <td class="report-left">Account No.</td>
+  <td class="report-left">-</td>
+  <td class="report-left">Current debit</td>
+  <td class="report-right">10,710,491.00</td>
+  <td class="report-left">Bank</td>
+  <td class="report-right">-</td>
+</tr>
+<tr>
+  <td class="report-left">Account No.</td>
+  <td class="report-left">-</td>
+  <td class="report-left">Current credit</td>
+  <td class="report-right">1,010,291.00</td>
+  <td class="report-left">In Hand</td>
+  <td class="report-right">-</td>
+</tr>
+  </table>
+
+<br/>
+<br/>
+
+<!-- value table -->
+<table border="1" width="80%">
+  <tr>
+    <th>Date</th>
+    <th>Debit</th>
+    <th>Credit</th>
+    <th>Total Debit</th>
+    <th>Total Credit</th>
+  </tr>
+  <tr>
+    <td>01/02/2025</td>
+    <td class="report-right">8,866.00</td>
+    <td class="report-right">52,246.00</td>
+    <td class="report-right">8,866.00</td>
+    <td class="report-right">52,246.00</td>
+  </tr>
+  <tr>
+    <td>02/02/2025</td>
+    <td class="report-right">48,984.00</td>
+    <td class="report-right">46,424.00</td>
+    <td class="report-right">48,984.00</td>
+    <td class="report-right">46,424.00</td>
+  </tr>
+</table>
+
+
+</div>
+</div>
+{% endblock %}

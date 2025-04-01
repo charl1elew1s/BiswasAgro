@@ -14,36 +14,45 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Handle cancel button
-    document.querySelector(".cancel-btn").addEventListener("click", function () {
-        document.getElementById("delete-modal").classList.remove("show");
-        selectedId = null;
-        tableId = null;
-    });
-
+    const cancelButton = document.querySelector(".cancel-btn");
+    if (cancelButton) { // Check if the element exists
+        cancelButton.addEventListener("click", function () {
+            document.getElementById("delete-modal").classList.remove("show");
+            selectedId = null;
+            tableId = null;
+        });
+    }
 
     // Handle delete confirmation
-    document.querySelector(".confirm-delete-btn").addEventListener("click", function () {
-        if (selectedId && tableId) {
-            fetch(`/${tableId}/delete/${selectedId}`, { 
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": getCSRFToken()
+    const deleteButtons = document.querySelectorAll(".delete-table-entry");
+    if (deleteButtons.length > 0) { // Check if elements were found
+        deleteButtons.forEach(button => {
+            document.querySelector(".confirm-delete-btn").addEventListener("click", function () {
+                if (selectedId && tableId) {
+                    fetch(`/${tableId}/delete/${selectedId}`, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": getCSRFToken()
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Deleted successfully!");
+                            location.reload(); // Refresh to update the table
+                        } else {
+                            alert(data.error);
+                        }
+                        document.getElementById("delete-modal").style.display = "none";
+                    })
+                    .catch(error => console.error("Error:", error));
                 }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Deleted successfully!");
-                    location.reload(); // Refresh to update the table
-                } else {
-                    alert(data.error);
-                }
-                document.getElementById("delete-modal").style.display = "none";
-            })
-            .catch(error => console.error("Error:", error));
-        }
-    });
+            });
+        });
+    } else {
+        console.info("No elements with class 'delete-table-entry' found.");
+    }
 
 });
 

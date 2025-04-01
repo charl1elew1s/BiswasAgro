@@ -14,7 +14,7 @@
             <a href="{% url 'costs:show_loandetails_table' %}" class="sidebar-button">Loan Details</a>
             <a href="{% url 'costs:show_loan_providers_info_table' %}" class="sidebar-button">Loan Providers Info</a>
             <a href="{% url 'costs:show_loan_transactions_table' %}" class="sidebar-button">Loan Transactions</a>
-            <a href="{% url 'inv:show_mousa_table' %}" class="sidebar-button">Mousa</a>
+            <a href="{% url 'inv:show_mousa_table' %}" class="sidebar-button">Hari Transaction</a>
             <a href="{% url 'inv:show_mousaname_table' %}" class="sidebar-button">Mousa Name</a>
             <a href="{% url 'bisauth:show_salary_table' %}" class="sidebar-button">Salary</a>
             <a href="{% url 'inv:show_sectors_table' %}" class="sidebar-button">Sectors</a>
@@ -25,6 +25,6 @@
             <a href="{% url 'bisauth:show_usersinfo_table' %}" class="sidebar-button">Users</a>
             <a href="{% url 'bisauth:show_roles_table' %}" class="sidebar-button">Roles</a>
             <a href="{% url 'inv:show_term_table' %}" class="sidebar-button">Term</a>
-            <a href="/" class="sidebar-button">Reports</a>
+            <a href="{% url 'reports:landing' %}" class="sidebar-button">Reports</a>
             <a href="{% url 'bisauth:logout' %}" class="sidebar-button">Log Out</a>
         </div>

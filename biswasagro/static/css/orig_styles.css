@@ -20,15 +20,15 @@ body {
     padding: 20px;
 }
 
-
 .form-container {
     display: flex;
     justify-content: center;
     align-items: flex-start;
     width: 100%;
-    padding: 20px;
+    padding: 20px 20px 0;
     margin: 0;
-    /* margin-top: 450px; */
+    min-height: auto;
+    margin-top: 20px;
     /*margin-top: 12%; */
 }
 
@@ -104,20 +104,17 @@ body {
     display: flex;
     width: 100%;
     min-height: 100vh;
-    /* flex-grow: 1; */
+    flex-grow: 1;
 }
 
 .sidebar {
-    width: 180px;
-    flex-basis: 180px;
+    width: 250px;
     background-color: #222;
     padding: 20px;
     height: 100%;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    flex-grow: 0;
-    flex-shrink: 0;
 }
 
 /*
@@ -208,21 +205,6 @@ table {
     width: 100%;
     border-collapse: collapse;
 }
-table a {
-    /*display: block; /* Make the entire cell clickable */
-    width: 100%; /* Ensure the link fills the cell */
-    /*height: 100%; /* Ensure the link fills the cell */
-    padding: 5px; /* Add some padding for better spacing */
-    text-decoration: underline; /* Remove underline */
-    color: inherit; /* Inherit the table's text color */
-    /*box-sizing: border-box; /* Include padding in width/height */
-    /*line-height: 1.2;
-}
-  
-table a:hover {
-    color: black;
-    background-color: #d4af37; /* Light background on hover */
-}
 
 th, td {
     padding: 6px;
@@ -237,7 +219,7 @@ th {
 }
 
 td {
-    color: rgba(255, 166, 0, 0.897); 
+    color: orange; 
     background-color: #111;
     font-size: .7rem;
 }
@@ -534,233 +516,4 @@ end orig */
 
 a.disabled {
     pointer-events: none;
-}
-.toplevel-report {
-    flex-basis: 75%;
-    flex-shrink: 0;
-    margin-left: 2%;
-    margin-right: 0;
-} 
-
-/* Top Nav section */
-.top-nav {
-    background: #1b1b1b;
-    padding: 10px;
-    position: relative;
-    z-index: 100;
-    border-radius: 8px 8px 8px 8px; /*rounded corners  */
-    margin-bottom: 5px; /*space between nav and content */
-}
-
-/* Main navigation bar - horizontal */
-.top-nav > ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 20px;
-}
-
-/* All nav links - base styling */
-.top-nav a {
-    color: #ebb932;
-    text-decoration: none;
-    display: inline-block;
-    padding: 5px 10px;
-}
-
-/* Main nav items */
-.top-nav > ul > li > a {
-    position: relative;
-}
-
-/* Dropdown container */
-.dropdown {
-    position: relative;
-}
-
-/* Dropdown menu - vertical list and rounded corners*/
-.dropdown-menu {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: #333;
-    color: #ebb932;
-    min-width: 200px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.2s ease;
-    border-radius: 8px 8px 8px 8px; /*rounded corners */
-}
-
-/* Dropdown items */
-.dropdown-menu li {
-    display: block;
-    width: 100%;
-}
-
-/* Dropdown links */
-.dropdown-menu a {
-    color: #ebb932;
-    padding: 6px 15px;
-    display: block;
-    white-space: nowrap;
-    line-height: 1.3;
-}
-
-/* Hover states */
-.top-nav > ul > li > a:hover {
-    text-decoration: underline;
-    flex: 1;
-    text-align: center;
-}
-
-/* when dropdown is open, round all corners */
-.dropdown:hover .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    border-radius: 8px 8px 8px 8px; /*rounded corners */
-}
-
-.dropdown-menu a:hover {
-    background-color: rgba(0,0,0,0.1);
-}
-
-/* Active state */
-.top-nav li.active > a {
-    color: #4CAF50;
-    font-weight: bold;
-}
-
-/* Active link indicator */
-.top-nav a.active {
-    background: #ebb932;
-    color: #333;
-    border-radius: 4px;
-}
-
-.nav-row {
-    display: flex;
-    flex-wrap: wrap; /* Allow the items to wrap to the next line if needed */
-    gap: 15px; /* Space between links */
-}
-
-.nav-row li {
-    list-style: none;
-}
-
-.nav-row a {
-    text-decoration: none;
-    color: #d4af37;
-    font-size: 16px;
-    padding: 8px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.nav-row a:hover {
-    background-color: #444;
-}
-
-/* End Top Nav section */
-
-/* Main content area */
-.main-content {
-    flex: 1; /* Takes remaining space */
-    display: flex;
-    flex-direction: column;
-}
-
-/* Content area below nav */
-.content-area {
-    color: #d4af37;
-    background: #222;
-    padding: 20px;
-    margin-top: 5px;
-    border-radius: 0 0 8px 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    min-height: 300px;
-}
-
-#content-container {
-    flex-grow: 1;
-    flex-shrink: 0;
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    padding: 0;
-    color: #d4af37;
-
-    /* border: 2px solid red; */
-}
-
-.default-content {
-    text-align: center;
-    padding: 50px 20px;
-    color: #d4af37;
-}
-
-.error-message {
-    color: #d9534f;
-    padding: 20px;
-    background: #f8dfda;
-    border-radius: 4px;
-}
-
-td.totals {
-    text-align: left; 
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #b08c27;
-}
-
-td.total_values {
-    text-align: center; 
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #b08c27;
-}
-
-td.daily_total_values {
-    text-align: right; 
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #b08c27;
-}
-
-.report-link {
-    /* color: #b08c27; */
-    color: rgba(255, 166, 0, 0.705); 
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 11px;
-    text-decoration: none; 
-}
-
-.report-link:hover {
-    text-decoration: underline; 
-}
-
-.report-content {
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    /* padding: 50px 20px; */
-    color: #d4af37;
-    flex-direction: column;
-}
-
-.report-left {
-    text-align: left;
-}
-
-.report-right {
-    text-align: right;
 }

@@ -1,0 +1,49 @@
+<div class="toplevel-report">
+  <nav class="top-nav">
+  <!-- First row of links  -->
+  <ul class="nav-row">
+     <li><a href="{% url 'reports:daily' str_date='now' %}" class="nav-link">Daily Report</a></li>
+     <li><a href="{% url 'reports:monthly' str_date='now' %}" class="nav-link">Monthly Report</a></li>
+     <li><a href="{% url 'reports:annual' str_date='now' %}" class="nav-link">Annual Report</a></li>
+     <li><a href="">Investment Report</a></li>
+     <li><a href="{% url 'reports:finacc' str_date='now' %}" class="nav-link">Financial Accounting</a></li>
+  </ul>
+
+  <!-- Second row of links (Dropdown) -->
+  <ul class="nav-row">
+     <li class="dropdown">
+         <a href="">Fish counting ▾</a>
+         <ul class="dropdown-menu">
+            <li><a href="{% url 'reports:fish_cnt_details' %}">Details</a></li>
+            <li><a href="">Summary</a></li>
+            <li><a href="">Current fish count</a></li>
+         </ul>
+     </li>
+     <li class="dropdown">
+         <a href="">Hari's report ▾</a>
+         <ul class="dropdown-menu">
+            <li><a href="">Landowner's account</a></li>
+            <li><a href="">Fiscal Year 2023-24</a></li>
+            <li><a href="">Fiscal Year 2024-25</a></li>
+         </ul>
+     </li>
+     <li class="dropdown">
+         <a href="">Land related ▾</a>
+         <ul class="dropdown-menu">
+            <li><a href="">South</a></li>
+            <li><a href="">East</a></li>
+            <li><a href="">West</a></li>
+            <li><a href="">Bright</a></li>
+         </ul>
+     </li>
+     <li class="dropdown">
+         <a href="">Charts ▾</a>
+         <ul class="dropdown-menu">
+            <li><a href="{% url 'reports:disp_fish' %}">Fish Charts</a></li>
+            <li><a href="">Cost Charts</a></li>
+            <li><a href="">Earning Charts</a></li>
+            <li><a href="">Fishbuy Charts</a></li>
+         </ul>
+     </li>
+   </ul>
+  </nav>

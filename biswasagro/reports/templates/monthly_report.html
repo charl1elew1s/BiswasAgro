@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Monthly Report
+{% endblock %}
+
+{% block main-content %}
+
+{% include 'top_nav.html' %}
+
+<div class="content-area">
+   <div class="report-content">
+           <form id="date_form" method="post" action="{% url 'reports:monthly' str_date='none' %}">
+               {% csrf_token %}
+                <label for="{{ form.year.id_for_label }}">{{ form.year.label }}:</label>
+                <select id="{{ form.year.id_for_label }}" name="{{form.year.name}}" >
+                   {% for year_val in year_select %}
+                        <option value="{{ year_val }}" {% if year_val == year %}selected{% endif %}>{{ year_val }}</option>
+                   {% endfor %}
+                </select>
+                {{ form.year.errors }}
+
+               <label for="{{ form.month.id_for_label }}">{{ form.month.label }}:</label>
+               <select id="{{ form.month.id_for_label }}" name="{{ form.month.name }}">
+                   {% for m_id, m_name in month_select.items %}
+                      <option value="{{m_id}}" {% if m_id == month %}selected{% endif %}>{{m_name}}</option>
+                   {% endfor %}
+               </select>
+               {{ form.month.errors }}
+
+               <button type="submit">Search</button>
+           </form>
+
+
+      <h2>Monthly Report for {{ month_word }} {{ year }}</h2>
+      <p>report generated at: {{ right_now }}</p>
+       {% if value_dict|length > 0 %}
+      <table>
+        <tr>
+          <th>Date</th>
+          <th>Costs</th>
+          <th>Earnings</th>
+        </tr>
+          {% for d_str, v_lst in value_dict.items %}
+          <tr>
+
+              <td><a href="{% url 'reports:daily' str_date=d_str %}" class="report-link">{{d_str}}</a></td>
+              <td>{{v_lst.0}}</td>
+              <td>{{v_lst.1}}</td>
+          </tr>
+          {% endfor %}
+          <!-- add the totals  -->
+          <tr>
+              <td class="totals">Totals</td>
+              <td class="total_values">{{total_costs}}</td>
+              <td class="total_values">{{total_earnings}}</td>
+          </tr>
+      </table>
+       {% else %}
+       <h2>No values to display for this month</h2>
+       {% endif %}
+
+</div>
+</div>
+{% endblock %}

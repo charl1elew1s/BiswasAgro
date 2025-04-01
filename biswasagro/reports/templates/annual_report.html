@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Annual Report
+{% endblock %}
+
+{% block main-content %}
+
+{% include 'top_nav.html' %}
+
+<div class="content-area">
+   <div class="report-content">
+           <form id="date_form" method="post" action="{% url 'reports:annual' str_date='none' %}">
+               {% csrf_token %}
+                <label for="{{ form.year.id_for_label }}">{{ form.year.label }}:</label>
+                <select id="{{ form.year.id_for_label }}" name="{{form.year.name}}" >
+                   {% for year_val in year_select %}
+                        <option value="{{ year_val }}" {% if year_val == year %}selected{% endif %}>{{ year_val }}</option>
+                   {% endfor %}
+                </select>
+                {{ form.year.errors }}
+
+               <button type="submit">Search</button>
+           </form>
+
+      <h2>Annual Report for {{ year }}</h2>
+      <p>report generated at: {{ right_now }}</p>
+       {% if value_dict|length > 0 %}
+      <table>
+        <tr>
+          <th>Month</th>
+          <th>Costs</th>
+          <th>Earnings</th>
+        </tr>
+          {% for m_str, v_lst in value_dict.items %}
+          <tr>
+
+              <td><a href="{% url 'reports:monthly' str_date=m_str %}" class="report-link">{{v_lst.0}}</a></td>
+              <td>{{v_lst.1}}</td>
+              <td>{{v_lst.2}}</td>
+          </tr>
+          {% endfor %}
+          <!-- add the totals  -->
+          <tr>
+              <td class="totals">Totals</td>
+              <td class="total_values">{{total_costs}}</td>
+              <td class="total_values">{{total_earnings}}</td>
+          </tr>
+      </table>
+       {% else %}
+       <h2>No values to display for this year</h2>
+       {% endif %}
+
+</div>
+</div>
+{% endblock %}

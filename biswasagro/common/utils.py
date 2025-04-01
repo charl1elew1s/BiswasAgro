@@ -1,7 +1,7 @@
 """Shared utilities"""
+import calendar
 from django.core.exceptions import FieldDoesNotExist
 from django.http import JsonResponse
-from datetime import date, datetime
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Model
@@ -9,11 +9,13 @@ from django.forms import ModelForm
 from django.urls import reverse
 from bisauth.models import Roles
 from decimal import Decimal
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from .column_mappers import update_cache
+import pytz
 
 DATE_FMT = '%Y-%m-%d'
 LOGS_FMT = '%Y-%m-%d %H:%M:%S'
+REPORT_NOW_FMT = f'%d %b %Y, %-I:%M %p'
 
 TBL_2_NAME = {
     'cost': 'Casual Expenses',
@@ -44,6 +46,7 @@ TBL_2_NAME = {
 }
 
 STATUS_LIST = [(1, 'Paid'), (2, 'Due')]
+UTC = pytz.utc
 
 
 def add_fields_to_session(request, model_obj):
@@ -310,3 +313,39 @@ def get_field_data(field_data, key):
         return None
 
 
+def get_dates_in_month(year, month):
+    """
+    Returns a list of all dates (datetime.date objects) within a given year and month.
+
+    Args:
+        year (int): The year.
+        month (int): The month (1-12).
+
+    Returns:
+        list: A list of datetime.date objects.
+    """
+    if not 1 <= month <= 12:
+        raise ValueError("Month must be between 1 and 12")
+
+    _, num_days = calendar.monthrange(year, month)  # Get the number of days in the month
+    dates = [date(year, month, day) for day in range(1, num_days + 1)]  # create a list of date objects
+    return dates
+
+
+def get_now(to_str=None):
+    """
+    Gets the datetime object for right now but handles Daylight Savings Time correctly based on time zone information
+    maintained in the pytz package.
+
+    Args:
+        to_str (bool): should we convert to a displayable string format?
+
+    Returns:
+        either a datetime object or a string depending on the value of to_str
+    """
+    tz = pytz.timezone('Europe/London')
+    now_utc = datetime.now(pytz.utc)
+    now_local = now_utc.astimezone(tz)
+    if to_str:
+        now_local = now_local.strftime(REPORT_NOW_FMT)
+    return now_local

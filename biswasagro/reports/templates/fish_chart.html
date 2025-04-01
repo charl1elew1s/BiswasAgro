@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Fish Count Chart
+{% endblock %}
+
+{% block main-content %}
+
+{% include 'top_nav.html' %}
+
+<div class="content-area">
+   <div class="report-content">
+           <form id="date_form" method="post" action="{% url 'reports:disp_fish' %}">
+               {% csrf_token %}
+                <label for="{{ form.fr_date.id_for_label }}">{{ form.fr_date.label }}:</label>
+               {{ form.fr_date }}
+               {{ form.fr_date.errors }}
+
+                <label for="{{ form.to_date.id_for_label }}">{{ form.to_date.label }}:</label>
+               {{ form.to_date }}
+               {{ form.to_date.errors }}
+
+               <button type="submit">Search</button>
+           </form>
+
+<br/>
+       <h2>Number of fish by Source from {{fr_date_str}} to {{to_date_str}}</h2>
+<p>report generated at: {{ right_now }}</p>
+
+<br/>
+
+       <img src="{% url 'reports:gen_fish' str_date=db_date %}" alt="Fish quantity plot">
+<br/>
+</div>
+</div>
+{% endblock %}

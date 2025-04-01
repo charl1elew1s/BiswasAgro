@@ -24,4 +24,6 @@ urlpatterns = [
     path('costs/', include("costs.urls")),
     path('inv/', include('inventory.urls')),
     path('bisauth/', include('bisauth.urls')),
+    path('reports/',include('reports.urls'))
 ]
+

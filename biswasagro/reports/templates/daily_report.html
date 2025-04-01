@@ -1,0 +1,167 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Daily Report
+{% endblock %}
+
+{% block main-content %}
+
+{% include 'top_nav.html' %}
+
+<div class="content-area">
+   <div class="report-content">
+
+       <form method="post" action="{% url 'reports:daily' str_date='none' %}">
+           {% csrf_token %}
+           <label for="{{ form.date.id_for_label }}">{{ form.date.label }}:</label>
+           {{ form.date }}
+           {{ form.date.errors }}
+
+           <button type="submit">Search</button>
+       </form>
+
+      <h2>Daily Report for {{day_word}} {{ month_word }} {{day_str}} {{ year }}</h2>
+      report generated at: {{ right_now }}
+
+       <h3>Expenditures</h3>
+   </div>
+
+    <div class="report-content">
+<table>
+<!--    Cost table-->
+    <tr>
+        {% if num_rows_from_cost == 0 %}
+        <td rowspan="2">Daily Cost</td>
+        {% else %}
+        <td rowspan="{{num_rows_from_cost_plus_1}}">Daily Cost</td>
+        {% endif %}
+        <th>Category</th>
+        <th>Cost Item</th>
+        <th>Quantity</th>
+        <th>Unit</th>
+        <th>Buyer</th>
+        <th>Voucher</th>
+        <th>Comment</th>
+        <th>Cost</th>
+        <th>Total</th>
+    </tr>
+    {% if num_rows_from_cost == 0 %}
+    <tr>
+        <td colspan="8">No data found</td>
+        <td>0.00</td>
+    </tr>
+    {% else %}
+    {% for row in rows_from_cost %}
+    <tr>
+        <td>{{row.costcategory}}</td>
+        <td>{{row.costitems}}</td>
+        <td>{{row.buyamount}}</td>
+        <td>{{row.unit}}</td>
+        <td>{{row.buyer}}</td>
+        <td>{{row.buyvoucher}}</td>
+        <td class="report-left">{{row.comment}}</td>
+        <td>{{row.cost}}</td>
+        {% if forloop.counter0 == 0 %}
+        <td rowspan="{{num_rows_from_cost}}">{{cost_total}}</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    {% endif %}
+<!--    Fishbuy Table values-->
+    <tr>
+        {% if num_rows_from_fishbuy == 0 %}
+        <td rowspan="2">Fishbuy</td>
+        {% else %}
+        <td rowspan="{{num_rows_from_fishbuy_plus_1}}">Fishbuy</td>
+        {% endif %}
+        <th>Fish Name</th>
+        <th>Buy From</th>
+        <th>Buy Amt</th>
+        <th>Fish Quantity</th>
+        <th>Fish To</th>
+        <th>Voucher</th>
+        <th>Comment</th>
+        <th>Price</th>
+        <th></th>
+    </tr>
+
+    {% if num_rows_from_fishbuy == 0 %}
+    <tr>
+      <td colspan="8">No data found</td>
+      <td>0.00</td>
+    </tr>
+    {% else %}
+    {% for row in rows_from_fishbuy %}
+    <tr>
+        <td>{{row.fishname}}</td>
+        <td>{{row.buyfrom}}</td>
+        <td>{{row.buyamount}}</td>
+        <td>{{row.fishquantity}}</td>
+        <td>{{row.fishto}}</td>
+        <td>{{row.vouchar}}</td>
+        <td class="report-left">{{row.comments}}</td>
+        <td>{{row.price}}</td>
+        {% if forloop.counter0 == 0 %}
+        <td rowspan="{{num_rows_from_fishbuy}}">{{fishbuy_total}}</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    {% endif %}
+
+    <!--    Grand Total Line-->
+    <tr>
+      <td colspan="9" class="daily_total_values">Total</td>
+      <td>{{income_grand_total}}</td>
+    </tr>
+
+</table>
+
+</div>
+
+<div class="report-content">
+    <h3>Earnings</h3>
+<table>
+    <tr>
+        {% if num_rows_from_earning == 0 %}
+        <td rowspan="2">Earnings</td>
+        {% else %}
+        <td rowspan="{{num_rows_from_earning_plus_1}}">Earnings</td>
+        {% endif %}
+        <th>Sector</th>
+        <th>Item</th>
+        <th>Source</th>
+        <th>Quantity</th>
+        <th>Qty/Unit</th>
+        <th>Memo</th>
+        <th>Comment</th>
+        <th>Price</th>
+        <th>Total</th>
+    </tr>
+
+    {% if num_rows_from_earning == 0 %}
+    <tr>
+        <td colspan="8">No data found</td>
+        <td>0.00</td>
+    </tr>
+    {% else %}
+    {% for row in rows_from_earning %}
+    <tr>
+        <td>{{row.sector}}</td>
+        <td>{{row.item}}</td>
+        <td>{{row.source}}</td>
+        <td>{{row.quantity}}</td>
+        <td>{{row.quantity_per_unit}}</td>
+        <td>{{row.memo}}</td>
+        <td class="report-left">{{row.comment}}</td>
+        <td>{{row.price}}</td>
+        {% if forloop.counter0 == 0 %}
+        <td rowspan="{{num_rows_from_earning}}">{{earning_total}}</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    {% endif %}
+</table>
+
+</div>
+</div>
+{% endblock %}
