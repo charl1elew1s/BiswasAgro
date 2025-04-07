@@ -7,7 +7,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Model
 from django.forms import ModelForm
 from django.urls import reverse
-from bisauth.models import Roles
 from decimal import Decimal
 from datetime import date, datetime, timezone
 from .column_mappers import update_cache

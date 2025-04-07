@@ -10,8 +10,9 @@ BiswasAgro - Financial Accounting Report
 
 <div class="content-area">
    <div class="report-content">
-           <form id="date_form" method="post" action="{% url 'reports:finacc' str_date='none' %}">
+           <form id="date_form" method="post" action="{% url 'reports:finacc' %}">
                {% csrf_token %}
+
                 <label for="{{ form.fr_date.id_for_label }}">{{ form.fr_date.label }}:</label>
                {{ form.fr_date }}
                {{ form.fr_date.errors }}
@@ -32,17 +33,17 @@ BiswasAgro - Financial Accounting Report
         <th colspan="6"><h2>Unity Agro Pvt. Ltd.</h2></th>
     </tr>
     <tr>
-        <td colspan="6" ><h3>Ledger Balance year to date until 25-03-2025</h3></td>
+        <td colspan="6" ><h3>Ledger Balance from {{current_start_str}} to {{current_end_str}}</h3></td>
     </tr>
 <tr>
-  <td colspan="3" class="report-left">Previous Debit (01/04/2024 to 31/01/2025)</td>
-  <td class="report-right">1,561,586.00</td>
+  <td colspan="3" class="report-left">Previous Debit ({{previous_start_str}} to {{previous_end_str}})</td>
+  <td class="report-right">{{previous_debits}}</td>
   <td class="report-left">Final Balance</td>
-  <td class="report-right">-9,954,879.00</td>
+  <td class="report-right">{{final_balance}}</td>
 </tr>
 <tr>
-  <td colspan="3" class="report-left">Previous Credit (01/04/2024 to 31/01/2025)</td>
-  <td class="report-right">1,141,260.00</td>
+  <td colspan="3" class="report-left">Previous Credit ({{previous_start_str}} to {{previous_end_str}})</td>
+  <td class="report-right">{{previous_credits}}</td>
   <td class="report-left">Loan</td>
   <td class="report-right">-</td>
 </tr>
@@ -50,7 +51,7 @@ BiswasAgro - Financial Accounting Report
   <td class="report-left">Account No.</td>
   <td class="report-left">-</td>
   <td class="report-left">Current debit</td>
-  <td class="report-right">10,710,491.00</td>
+  <td class="report-right">{{current_debits}}</td>
   <td class="report-left">Bank</td>
   <td class="report-right">-</td>
 </tr>
@@ -58,17 +59,18 @@ BiswasAgro - Financial Accounting Report
   <td class="report-left">Account No.</td>
   <td class="report-left">-</td>
   <td class="report-left">Current credit</td>
-  <td class="report-right">1,010,291.00</td>
+  <td class="report-right">{{current_credits}}</td>
   <td class="report-left">In Hand</td>
   <td class="report-right">-</td>
 </tr>
   </table>
 
 <br/>
-<br/>
+
+       <h4>Details for selected date span: {{fr_date}} to {{to_date}}</h4>
 
 <!-- value table -->
-<table border="1" width="80%">
+<table>
   <tr>
     <th>Date</th>
     <th>Debit</th>
@@ -76,20 +78,15 @@ BiswasAgro - Financial Accounting Report
     <th>Total Debit</th>
     <th>Total Credit</th>
   </tr>
-  <tr>
-    <td>01/02/2025</td>
-    <td class="report-right">8,866.00</td>
-    <td class="report-right">52,246.00</td>
-    <td class="report-right">8,866.00</td>
-    <td class="report-right">52,246.00</td>
+    {% for span_row in summary_data %}
+    <tr>
+        <td>{{span_row.0}}</td>
+        <td class="report-right">{{span_row.1}}</td>
+        <td class="report-right">{{span_row.2}}</td>
+        <td class="report-right">{{span_row.3}}</td>
+        <td class="report-right">{{span_row.4}}</td>
   </tr>
-  <tr>
-    <td>02/02/2025</td>
-    <td class="report-right">48,984.00</td>
-    <td class="report-right">46,424.00</td>
-    <td class="report-right">48,984.00</td>
-    <td class="report-right">46,424.00</td>
-  </tr>
+    {% endfor %}
 </table>
 
 

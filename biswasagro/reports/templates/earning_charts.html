@@ -1,0 +1,84 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Earning Charts
+{% endblock %}
+
+{% block main-content %}
+
+{% include 'top_nav.html' %}
+
+<div class="content-area">
+   <div class="report-content">
+           <form id="date_form" method="post" action="{% url 'reports:disp_earn' %}">
+               {% csrf_token %}
+                <label for="{{ form.fr_date.id_for_label }}">{{ form.fr_date.label }}:</label>
+               {{ form.fr_date }}
+               {{ form.fr_date.errors }}
+
+                <label for="{{ form.to_date.id_for_label }}">{{ form.to_date.label }}:</label>
+               {{ form.to_date }}
+               {{ form.to_date.errors }}
+
+               <button type="submit">Search</button>
+           </form>
+
+<br/>
+       <h2>Price per Item by Source from {{fr_date_str}} to {{to_date_str}}</h2>
+<p>report generated at: {{ right_now }}</p>
+
+       <br/>
+       <br/>
+
+<!-- North -->
+       {% if has_data_dict.North %}
+       <img src="{% url 'reports:gen_earn_plt' plt_source='North' %}" alt="North earning plot">
+       {% else %}
+       <p>No data for North for this timespan</p>
+       {% endif %}
+
+       <br/>
+       <br/>
+
+<!-- South -->
+       {% if has_data_dict.South %}
+       <img src="{% url 'reports:gen_earn_plt' plt_source='South' %}" alt="South earning plot">
+       {% else %}
+       <p>No data for South for this timespan</p>
+       {% endif %}
+
+       <br/>
+       <br/>
+
+<!-- East -->
+       {% if has_data_dict.East %}
+       <img src="{% url 'reports:gen_earn_plt' plt_source='East' %}" alt="East earning plot">
+       {% else %}
+       <p>No data for East for this timespan</p>
+       {% endif %}
+
+       <br/>
+       <br/>
+
+<!-- West -->
+       {% if has_data_dict.West %}
+       <img src="{% url 'reports:gen_earn_plt' plt_source='West' %}" alt="West earning plot">
+       {% else %}
+       <p>No data for West for this timespan</p>
+       {% endif %}
+
+       <br/>
+       <br/>
+
+       <!-- Uzzal -->
+       {% if has_data_dict.Uzzal %}
+       <img src="{% url 'reports:gen_earn_plt' plt_source='Uzzal' %}" alt="Uzzal earning plot">
+       {% else %}
+       <p>No data for Uzzal for this timespan</p>
+       {% endif %}
+
+
+       <br/>
+</div>
+</div>
+{% endblock %}

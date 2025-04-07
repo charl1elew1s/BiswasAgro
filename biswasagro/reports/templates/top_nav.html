@@ -6,13 +6,14 @@
      <li><a href="{% url 'reports:monthly' str_date='now' %}" class="nav-link">Monthly Report</a></li>
      <li><a href="{% url 'reports:annual' str_date='now' %}" class="nav-link">Annual Report</a></li>
      <li><a href="">Investment Report</a></li>
-     <li><a href="{% url 'reports:finacc' str_date='now' %}" class="nav-link">Financial Accounting</a></li>
+     <li><a href="{% url 'reports:finacc' %}" class="nav-link">Financial Accounting</a></li>
   </ul>
 
-  <!-- Second row of links (Dropdown) -->
+  <!-- Second row of links (Dropdowns) -->
   <ul class="nav-row">
      <li class="dropdown">
-         <a href="">Fish counting ▾</a>
+<!--         <a href="">Fish counting ▾</a>-->
+         <p>Fish Counting ▾</p>
          <ul class="dropdown-menu">
             <li><a href="{% url 'reports:fish_cnt_details' %}">Details</a></li>
             <li><a href="">Summary</a></li>
@@ -20,7 +21,8 @@
          </ul>
      </li>
      <li class="dropdown">
-         <a href="">Hari's report ▾</a>
+<!--         <a href="">Hari's report ▾</a>-->
+         <p>Hari's report ▾</p>
          <ul class="dropdown-menu">
             <li><a href="">Landowner's account</a></li>
             <li><a href="">Fiscal Year 2023-24</a></li>
@@ -28,20 +30,23 @@
          </ul>
      </li>
      <li class="dropdown">
-         <a href="">Land related ▾</a>
+<!--         <a href="">Land related ▾</a>-->
+         <p>Land related ▾</p>
          <ul class="dropdown-menu">
-            <li><a href="">South</a></li>
-            <li><a href="">East</a></li>
-            <li><a href="">West</a></li>
-            <li><a href="">Bright</a></li>
+            <li><a href="{% url 'reports:land_report' source='North' %}">North</a></li>
+            <li><a href="{% url 'reports:land_report' source='South' %}">South</a></li>
+            <li><a href="{% url 'reports:land_report' source='East' %}">East</a></li>
+            <li><a href="{% url 'reports:land_report' source='West' %}">West</a></li>
+            <li><a href="{% url 'reports:land_report' source='Uzzal' %}">Uzzal</a></li>
          </ul>
      </li>
      <li class="dropdown">
-         <a href="">Charts ▾</a>
+<!--         <a href="">Charts ▾</a>-->
+         <p>Charts ▾</p>
          <ul class="dropdown-menu">
             <li><a href="{% url 'reports:disp_fish' %}">Fish Charts</a></li>
             <li><a href="">Cost Charts</a></li>
-            <li><a href="">Earning Charts</a></li>
+            <li><a href="{% url 'reports:disp_earn' %}">Earning Charts</a></li>
             <li><a href="">Fishbuy Charts</a></li>
          </ul>
      </li>

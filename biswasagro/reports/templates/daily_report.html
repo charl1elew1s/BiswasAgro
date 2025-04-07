@@ -23,6 +23,7 @@ BiswasAgro - Daily Report
       <h2>Daily Report for {{day_word}} {{ month_word }} {{day_str}} {{ year }}</h2>
       report generated at: {{ right_now }}
 
+       <br/>
        <h3>Expenditures</h3>
    </div>
 
@@ -108,16 +109,97 @@ BiswasAgro - Daily Report
     {% endfor %}
     {% endif %}
 
+<!-- Hari (Mousa) table values -->
+    <tr>
+        {% if num_rows_from_mousa == 0 %}
+        <td rowspan="2">Hari</td>
+        {% else %}
+        <td rowspan="{{num_rows_from_mousa_plus_1}}">Hari</td>
+        {% endif %}
+        <th>Mousa</th>
+        <th>Dag</th>
+        <th>Term</th>
+        <th></th>
+        <th></th>
+        <th>Voucher</th>
+        <th>Owner</th>
+        <th>Amount</th>
+        <th></th>
+    </tr>
+
+    {% if num_rows_from_mousa == 0 %}
+    <tr>
+      <td colspan="8">No data found</td>
+      <td>0.00</td>
+    </tr>
+    {% else %}
+    {% for row in rows_from_mousa %}
+    <tr>
+        <td>{{row.mousa}}</td>
+        <td>{{row.dag}}</td>
+        <td>{{row.term}}</td>
+        <td></td>
+        <td></td>
+        <td>{{row.vouchar}}</td>
+        <td class="report-left">{{row.owner}}</td>
+        <td>{{row.amount}}</td>
+        {% if forloop.counter0 == 0 %}
+        <td rowspan="{{num_rows_from_mousa}}">{{mousa_total}}</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    {% endif %}
+
+<!--Salary table values -->
+    <tr>
+        {% if num_rows_from_salary == 0 %}
+        <td rowspan="2">Salary</td>
+        {% else %}
+        <td rowspan="{{num_rows_from_salary_plus_1}}">Salary</td>
+        {% endif %}
+        <th>Purpose</th>
+        <th>Reason</th>
+        <th>Quantity</th>
+        <th>Rate</th>
+        <th>Personnel</th>
+        <th>Voucher</th>
+        <th>Comment</th>
+        <th>Total</th>
+        <th></th>
+    </tr>
+    {% if num_rows_from_salary == 0 %}
+    <tr>
+      <td colspan="8">No data found</td>
+      <td>0.00</td>
+    </tr>
+    {% else %}
+    {% for row in rows_from_salary %}
+    <tr>
+        <td>{{row.purpose}}</td>
+        <td>{{row.reason}}</td>
+        <td>{{row.quantity}}</td>
+        <td>{{row.rate}}</td>
+        <td>{{row.personel}}</td>
+        <td>{{row.vouchar}}</td>
+        <td class="report-left">{{row.comment}}</td>
+        <td>{{row.total}}</td>
+        {% if forloop.counter0 == 0 %}
+        <td rowspan="{{num_rows_from_salary}}">{{salary_total}}</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    {% endif %}
+
     <!--    Grand Total Line-->
     <tr>
       <td colspan="9" class="daily_total_values">Total</td>
-      <td>{{income_grand_total}}</td>
+      <td>{{costs_grand_total}}</td>
     </tr>
 
 </table>
 
 </div>
-
+<br/>
 <div class="report-content">
     <h3>Earnings</h3>
 <table>

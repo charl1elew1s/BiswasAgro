@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+BiswasAgro - Land Report
+{% endblock %}
+
+{% block main-content %}
+
+{% include 'top_nav.html' %}
+
+<div class="content-area">
+   <div class="report-content">
+      <h2>Land Report for {{source}}</h2>
+      <p>report generated at: {{ right_now }}</p>
+
+       {% if num_of_rows_from_land > 0 %}
+       <table>
+           <tr>
+               <th>ID</th>
+               <th>Enclosure</th>
+               <th>Mousa</th>
+               <th>Stain</th>
+               <th>Ledger</th>
+               <th>Quantity</th>
+               <th>Flat</th>
+               <th>Cannel</th>
+               <th>Take</th>
+               <th>Owners</th>
+               <th>Comment</th>
+           </tr>
+           {% for dv in display_values %}
+           <tr>
+               <td>{{dv.id}}</td>
+               <td>{{dv.enclosure}}</td>
+               <td>{{dv.mousa}}</td>
+               <td>{{dv.stain}}</td>
+               <td>{{dv.ledger}}</td>
+               <td>{{dv.quantity}}</td>
+               <td>{{dv.flat}}</td>
+               <td>{{dv.cannal}}</td>
+               <td>{{dv.take}}</td>
+               <td class="report-left">{{dv.owners}}</td>
+               <td>{{dv.comment}}</td>
+           </tr>
+           {% endfor %}
+
+           <!-- total line -->
+           <tr>
+             <td colspan="10" class="daily_total_values">Total Take</td>
+             <td class="total_values">{{ total_take }}</td>
+           </tr>
+
+       </table>
+       {% else %}
+       <h2>No values to display for this area</h2>
+       {% endif %}
+
+</div>
+</div>
+{% endblock %}
