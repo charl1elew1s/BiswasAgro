@@ -49,9 +49,11 @@ def login(request):
 
 
 def logout(request):
-    if 'user' in request.session:
-        del request.session['user']
-        remove_all_mappings(request)
+    # remove everything from the session
+    request.session.clear()
+    # if 'user' in request.session:
+    #     del request.session['user']
+    #     remove_all_mappings(request)
     return redirect('home')
 
 

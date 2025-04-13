@@ -66,7 +66,10 @@ def reports_landing(request):
 
 
 def daily(request, str_date):
-    """Generate the daily report, it should include, costs, fishbuy and earnings"""
+    """
+    Generate the daily report, it should include, costs, fishbuy, mousa, and salary for debits and
+    earnings for credits
+    """
 
     if 'user' not in request.session:
         # no reports allowed if you're not logged in!
@@ -290,8 +293,6 @@ def monthly(request, str_date):
     value_dict = defaultdict(lambda: [0.0, 0.0])
 
     # get the date and cost values from the costs table for the month in question (there may be none)
-    # CL: use the first query if we need to filter out and only include 'Paid' status values
-    # rows_from_cost = list(Cost.objects.filter(date__startswith=date_query_str, status=1).values('date', 'cost'))
     rows_from_cost = list(Cost.objects.filter(date__startswith=date_query_str).values('date', 'cost'))
 
     # start building the value_dict for these values
@@ -302,8 +303,6 @@ def monthly(request, str_date):
         value_dict[date_val][0] += cost_val
 
     # get the costs (price) from the fishbuy table for the month in question (there may be none)
-    # CL: use the first query if we need to filter out and only include 'Paid' status values
-    # rows_from_fishbuy = list(Fishbuy.objects.filter(date__startswith=date_query_str, status=1).values('date', 'price'))
     rows_from_fishbuy = list(Fishbuy.objects.filter(date__startswith=date_query_str).values('date', 'price'))
 
     # if any value is for an existing month add the value from the fisthbuy table
@@ -313,8 +312,6 @@ def monthly(request, str_date):
         value_dict[date_val][0] += price_val
 
     # get values from the salary table (there may be none)
-    # CL: use the first query if we need to filter out and only include 'Paid' status values
-    # rows_from_salary = Salary.objects.filter(date__startswith=date_query_str, status=1).values('date', 'total')
     rows_from_salary = list(Salary.objects.filter(date__startswith=date_query_str).values('date', 'total'))
 
     # add values from salary table
@@ -325,8 +322,6 @@ def monthly(request, str_date):
         value_dict[date_val][0] += total_val
 
     # include values from the mousa table (if any)
-    # CL: use the first query if we need to filter out and only include 'Paid' status values
-    # rows_from_mousa = list(Mousa.objects.filter(date__startswith=date_query_str, status=1).values('date', 'amount'))
     rows_from_mousa = list(Mousa.objects.filter(date__startswith=date_query_str).values('date', 'amount'))
 
     # if any value is for an existing year, add the value from the mousa table
@@ -337,8 +332,6 @@ def monthly(request, str_date):
         value_dict[date_val][0] += amount_val
 
     # now get the earnings values from the earning table
-    # CL: use the first query if we need to filter out and only include 'Paid' status values
-    # rows_from_earning = list(Earning.objects.filter(date__startswith=date_query_str, status=1).values('date', 'price'))
     rows_from_earning = list(Earning.objects.filter(date__startswith=date_query_str).values('date', 'price'))
 
     # now update the earning values in the value_dict for any date found
@@ -419,8 +412,6 @@ def annual(request, str_date):
     value_dict = defaultdict(lambda: [0.0, 0.0])
 
     # get the date and cost values from the cost table for the year in question (there may be none)
-    # CL: use the first query if we need to filter out and only include 'Paid' status values
-    # rows_from_cost = list(Cost.objects.filter(date__startswith=year_str, status=1).values('date', 'cost'))
     rows_from_cost = list(Cost.objects.filter(date__startswith=year_str).values('date', 'cost'))
 
     # start building the value_dict for these values
@@ -434,8 +425,6 @@ def annual(request, str_date):
         value_dict[month_num][0] += cost_val
 
     # get the costs (price) from the fishbuy table for the year in question (there may be none)
-    # CL: use the first query if we need to filter out and only include 'Paid' status values
-    # rows_from_fishbuy = list(Fishbuy.objects.filter(date__startswith=year_str, status=1).values('date', 'price'))
     rows_from_fishbuy = list(Fishbuy.objects.filter(date__startswith=year_str).values('date', 'price'))
 
     # if any value is for an existing year, add the value from the fisthbuy table
@@ -447,8 +436,6 @@ def annual(request, str_date):
         value_dict[month_num][0] += price_val
 
     # get the salaries from the salary table for the year in question (there may be none)
-    # CL: use the first query if we need to filter out and only include 'Paid' status values
-    # rows_from_salary = Salary.objects.filter(date__startswith=year_str, status=1).values('date', 'total')
     rows_from_salary = list(Salary.objects.filter(date__startswith=year_str).values('date', 'total'))
 
     # if any value is for an existing year, add the value from the salary table
@@ -460,8 +447,6 @@ def annual(request, str_date):
         value_dict[month_num][0] += total_val
 
     # get the amounts from the mousa table (there may be none)
-    # CL: use the first query if we need to filter out and only include 'Paid' status values
-    # rows_from_mousa = list(Mousa.objects.filter(date__startswith=year_str, status=1).values('date', 'amount'))
     rows_from_mousa = list(Mousa.objects.filter(date__startswith=year_str).values('date', 'amount'))
 
     # if any value is for an existing year, add the value from the mousa table
@@ -473,8 +458,6 @@ def annual(request, str_date):
         value_dict[month_num][0] += amount_val
 
     # now get the earnings values from the earning table
-    # CL: use the first query if we need to filter out and only include 'Paid' status values
-    # rows_from_earning = list(Earning.objects.filter(date__startswith=year_str, status=1).values('date', 'price'))
     rows_from_earning = list(Earning.objects.filter(date__startswith=year_str).values('date', 'price'))
 
     # now update the earning values in the value_dict for any date found
@@ -526,8 +509,6 @@ def fish_count_details(request):
         return redirect('bisauth:login')
 
     # get details from the fishbuy table
-    # CL: use the first query if we need to filter out and only include 'Paid' status values
-    # rows_from_fishbuy = list(Fishbuy.objects.filter(status=1).order_by('date'))
     rows_from_fishbuy = list(Fishbuy.objects.all().order_by('date'))
 
     # accumulate values for each area
@@ -563,53 +544,10 @@ def financial_accounting(request):
     context = dict()
     right_now = get_now(to_str=False)
 
-    # For "previous" and "current" reporting (the top of the report) we need to know what is "current" and was
-    # "previous" and that depends on the beginning of the current fiscal year. Because fiscal years start on April
-    # 1st we first need to know if it's before or after April 1 so that we can determine which fiscal year we are
-    # presently in.
-    #
-    # This is regardless of the "Date From" and "Date To" values coming from the search boxes,
-    # those dates are used for the bottom table of the report
-    mon_num = right_now.month
-
-    # We will need to calculate the previous_(start/end) and current_(start/end) based on where "right_now" falls
-    # with respect to fiscal years.
-    previous_start_dt = None
-    previous_end_dt = None
-    current_start_dt = None
-    current_end_dt = None
-    if mon_num > 3:
-        # the start of the current fiscal year was April 1 THIS year
-        current_start_dt = datetime.strptime(f'{right_now.year}-04-01', DB_FMT)
-    else:
-        # the start of the current fiscal year was last April 1
-        last_year = right_now.year - 1
-        current_start_dt = datetime.strptime(f'{last_year}-04-01', DB_FMT)
-
-    # the previous_(start/end) and the current_end are relative to the current_start
-    current_end_dt = current_start_dt + relativedelta(years=1) - relativedelta(days=1)
-    previous_start_dt = current_start_dt - relativedelta(years=1)
-    previous_end_dt = previous_start_dt + relativedelta(years=1) - relativedelta(days=1)
-
-    previous_credits, previous_debits = get_yearly_total(previous_start_dt, previous_end_dt)
-    current_credits, current_debits = get_yearly_total(current_start_dt, current_end_dt)
-    context['previous_start_str'] = previous_start_dt.strftime(DISPLAY_FMT)
-    context['previous_end_str'] = previous_end_dt.strftime(DISPLAY_FMT)
-    context['previous_credits'] = f"{previous_credits:,.2f}"
-    context['previous_debits'] = f"{previous_debits:,.2f}"
-
-    context['current_start_str'] = current_start_dt.strftime(DISPLAY_FMT)
-    context['current_end_str'] = current_end_dt.strftime(DISPLAY_FMT)
-    context['current_credits'] = f"{current_credits:,.2f}"
-    context['current_debits'] = f"{current_debits:,.2f}"
-
-    final_balance = current_credits - current_debits
-    context['final_balance'] = f"{final_balance:,.2f}"
-
     if request.method == 'GET':
         # This means we landed here off the reports landing page and no date range was selected
-        # we will start off using the monthly totals, so we'll arbitrarily choose the start time to be the
-        # beginning of this month and the end time to be today, the user can change this time span using
+        # we will start off arbitrarily choosing the From date to be the beginning of this month and the
+        # To date be today, the user can change this time span using
         # the From Date, To Date form at the top of the page
         fr_date_str = f"{right_now.year}-{right_now.month:02d}-01"
         to_date_str = f"{right_now.year}-{right_now.month:02d}-{right_now.day:02d}"
@@ -625,10 +563,35 @@ def financial_accounting(request):
         template_name = 'finacc_report.html'
         return render(request, template_name, context)
 
+    # "previous period" is defined to be from April 1 2024 until 1 day before the From date on the form
+    # "current period" is defined to be the span of dates from the From and To form on the top of the page
+
     # from here we know we have a valid form
     cleaned_data = form.cleaned_data
     start_dt = cleaned_data['fr_date']
     end_dt = cleaned_data['to_date']
+
+    previous_start_dt = datetime.strptime("2024-04-01", DB_FMT)
+    previous_end_dt = start_dt - relativedelta(days=1)
+
+    current_start_dt = start_dt
+    current_end_dt = end_dt
+
+    previous_credits, previous_debits = get_yearly_total(previous_start_dt, previous_end_dt)
+    current_credits, current_debits = get_yearly_total(current_start_dt, current_end_dt)
+
+    context['previous_start_str'] = previous_start_dt.strftime(DISPLAY_FMT)
+    context['previous_end_str'] = previous_end_dt.strftime(DISPLAY_FMT)
+    context['previous_credits'] = f"{previous_credits:,.2f}"
+    context['previous_debits'] = f"{previous_debits:,.2f}"
+
+    context['current_start_str'] = current_start_dt.strftime(DISPLAY_FMT)
+    context['current_end_str'] = current_end_dt.strftime(DISPLAY_FMT)
+    context['current_credits'] = f"{current_credits:,.2f}"
+    context['current_debits'] = f"{current_debits:,.2f}"
+
+    final_balance = current_credits - current_debits
+    context['final_balance'] = f"{final_balance:,.2f}"
 
     # Get the values for the date span table (at the bottom of the page)
     # as we're accumulating data for each day we will only update the debit and credit for that day and then

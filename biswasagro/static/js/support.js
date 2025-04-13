@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert("Deleted successfully!");
+                            //alert("Deleted successfully!");
                             location.reload(); // Refresh to update the table
                         } else {
                             alert(data.error);

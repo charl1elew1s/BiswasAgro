@@ -1,5 +1,9 @@
 from django import forms
 from django.forms import Form
+from datetime import date
+
+# Human-readable format for Dates
+DISPLAY_FMT = '%d-%m-%Y'
 
 
 class DateSelectorForm(Form):
